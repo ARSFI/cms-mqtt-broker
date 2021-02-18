@@ -1,6 +1,6 @@
 # CMS MQTT Broker
 
-A multi-server cluster (2 initially) of MQTT brokers to enable sharing information between Winlink services. Providing both TCP and WebSockets endpoints. Must run as a Windows service.
+A multi-server cluster (2 initially) of MQTT brokers (as windows services) to enable sharing information between Winlink services. Providing both TCP and WebSockets endpoints. 
 
 Possibly use MQTTNet library...
 
