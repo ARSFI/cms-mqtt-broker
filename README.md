@@ -17,6 +17,7 @@ A multi-server cluster (2 initially) of MQTT brokers to enable sharing informati
 
 # Desired features
 * Suport SSL/TLS connections 
+* Support custom service control commands for additional control 
 
 
 
