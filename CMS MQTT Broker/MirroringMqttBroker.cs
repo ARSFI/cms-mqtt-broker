@@ -21,6 +21,8 @@ namespace winlink.cms.mqtt
         private int theirPort = 1883; //this will need to be added to the global config data in mysql 
         private string OurClientId = "cms-a"; //this can be obtained from each cms and passed as part of the configuration
         private string theirIp = ""; //this will need to be added to the global config data in mysql 
+        private int connectionDelayInMilliseconds = 5000;
+        private int stoppingDelayInMilliseconds = 2000;
 
         public MirroringMqttBroker()
         {
@@ -60,9 +62,12 @@ namespace winlink.cms.mqtt
 
             //!!! below must be able to sustain a disconnect and recover
 
-            await Task.Delay(5000).ContinueWith(async (arg) =>
+            await Task.Delay(connectionDelayInMilliseconds).ContinueWith(async (arg) =>
             {
-                await mqttClient.ConnectAsync(mqttClientOptionsBuilder.Build());
+                while (!stoppingToken.IsCancellationRequested)
+                {
+                    await mqttClient.ConnectAsync(mqttClientOptionsBuilder.Build(), stoppingToken);
+                }
             });
 
             while (!stoppingToken.IsCancellationRequested)
@@ -74,7 +79,7 @@ namespace winlink.cms.mqtt
 
                 //!!!
                 
-                await Task.Delay(2000, stoppingToken);
+                await Task.Delay(stoppingDelayInMilliseconds, stoppingToken);
             }
             await mqttServer.StopAsync();
         }
