@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "CMS_MQTT_Broker_Service": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
