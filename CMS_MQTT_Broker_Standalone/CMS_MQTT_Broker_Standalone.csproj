@@ -7,5 +7,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CMS MQTT Broker\CMS MQTT Broker.csproj" />
+    <ProjectReference Include="..\BrokerConfiguration\BrokerConfiguration.csproj" />
   </ItemGroup>
 </Project>

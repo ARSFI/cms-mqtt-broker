@@ -8,6 +8,7 @@ using MQTTnet.Client.Options;
 using MQTTnet.Server;
 using Microsoft.Extensions.Hosting.WindowsServices;
 using NLog;
+using winlink.cms.mqtt.config;
 
 namespace winlink.cms.mqtt
 {
@@ -16,17 +17,11 @@ namespace winlink.cms.mqtt
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
         static IMqttClient mqttClient;
 
-        //!!! move ip,port, and client id's to configuration class
-        private int ourPort = 1883; //this will need to be added to the global config data in mysql 
-        private int theirPort = 1883; //this will need to be added to the global config data in mysql 
-        private string OurClientId = "cms-a"; //this can be obtained from each cms and passed as part of the configuration
-        private string theirIp = ""; //this will need to be added to the global config data in mysql 
-        private int connectionDelayInMilliseconds = 5000;
-        private int stoppingDelayInMilliseconds = 2000;
+        private IServiceConfiguration serviceConfiguration;
 
-        public MirroringMqttBroker()
+        public MirroringMqttBroker(IServiceConfiguration configuration)
         {
-            //
+            serviceConfiguration = configuration;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -36,14 +31,14 @@ namespace winlink.cms.mqtt
 
             // Create options
             var optionsBuilder = new MqttServerOptionsBuilder()
-                .WithDefaultEndpointPort(ourPort)
-                .WithClientId(OurClientId)
+                .WithDefaultEndpointPort(serviceConfiguration.ThisServicePort)
+                .WithClientId(serviceConfiguration.ThisClientId)
                 .WithApplicationMessageInterceptor((arg) =>
                 {
                     arg.AcceptPublish = true;
 
                     // Avoid loops by not mirroring messages from other servers.
-                    if (arg.ClientId != OurClientId)
+                    if (arg.ClientId != serviceConfiguration.ThisClientId)
                     {
                         // Mirror message on other server.
                         mqttClient.PublishAsync(arg.ApplicationMessage);
@@ -57,12 +52,14 @@ namespace winlink.cms.mqtt
             // Connect to the other server after a delay.
             mqttClient = mqttFactory.CreateMqttClient();
             var mqttClientOptionsBuilder = new MqttClientOptionsBuilder()
-                .WithClientId(OurClientId)
-                .WithTcpServer(theirIp, theirPort);
+                .WithClientId(serviceConfiguration.ThisClientId)
+                .WithTcpServer(
+                    serviceConfiguration.OtherServiceHostname,
+                    serviceConfiguration.OtherServicePort);
 
             //!!! below must be able to sustain a disconnect and recover
 
-            await Task.Delay(connectionDelayInMilliseconds).ContinueWith(async (arg) =>
+            await Task.Delay(serviceConfiguration.ConnectionDelayInMilliseconds).ContinueWith(async (arg) =>
             {
                 while (!stoppingToken.IsCancellationRequested)
                 {
@@ -79,7 +76,7 @@ namespace winlink.cms.mqtt
 
                 //!!!
                 
-                await Task.Delay(stoppingDelayInMilliseconds, stoppingToken);
+                await Task.Delay(serviceConfiguration.StoppingDelayInMilliseconds, stoppingToken);
             }
             await mqttServer.StopAsync();
         }

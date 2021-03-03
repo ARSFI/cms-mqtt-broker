@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NLog.Targets.Gelf\NLog.Targets.Gelf.csproj" />
+    <ProjectReference Include="..\BrokerConfiguration\BrokerConfiguration.csproj" />
   </ItemGroup>
 
 </Project>
