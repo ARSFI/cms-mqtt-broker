@@ -6,6 +6,7 @@
     <RootNamespace>winlink.cms.mqtt</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'CMS_MQTT_Broker_Service' " />
   <ItemGroup>
     <Content Remove="NLog.config" />
   </ItemGroup>
