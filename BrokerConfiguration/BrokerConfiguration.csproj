@@ -6,6 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MySql.Data" Version="8.0.23" />
+    <ProjectReference Include="..\cms-database\CMSDatabase\CMSDatabase.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Runtime" Version="4.3.1" />
   </ItemGroup>
 </Project>

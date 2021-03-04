@@ -1,0 +1,3 @@
+[submodule "cms-database"]
+	path = cms-database
+	url = git@github.com:ARSFI/cms-database.git

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMS_MQTT_Broker_Standalone"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrokerConfiguration", "BrokerConfiguration\BrokerConfiguration.csproj", "{60B7DB52-0D33-44BA-B10C-7C2332E276C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMSDatabase", "cms-database\CMSDatabase\CMSDatabase.csproj", "{664CEEA5-EBEB-4F1B-977B-4D303037825B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{60B7DB52-0D33-44BA-B10C-7C2332E276C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60B7DB52-0D33-44BA-B10C-7C2332E276C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60B7DB52-0D33-44BA-B10C-7C2332E276C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{664CEEA5-EBEB-4F1B-977B-4D303037825B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{664CEEA5-EBEB-4F1B-977B-4D303037825B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{664CEEA5-EBEB-4F1B-977B-4D303037825B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{664CEEA5-EBEB-4F1B-977B-4D303037825B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
