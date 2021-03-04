@@ -17,14 +17,13 @@ namespace winlink.cms.mqtt
             .UseWindowsService()
             .ConfigureAppConfiguration((context, config) =>
             {
-                // configure the app here.
+                context.Properties["cmsDatabase"] = new CMSDatabase(context.Configuration["sqlDatabaseConnectionString"]);
             })
             .ConfigureServices((hostContext, services) =>
             {
                 services.AddHostedService<MirroringMqttBroker>((serviceProvider) =>
                 {
-                    // TBD: load config string from appsettings
-                    var cmsDatabase = new CMSDatabase("testMySSQLConnectionString");
+                    var cmsDatabase = hostContext.Properties["cmsDatabase"] as CMSDatabase;
                     var cmsProperties = new CMSProperties(cmsDatabase);
                     var serviceConfiguration = new DatabaseServiceConfiguration(cmsProperties);
                     return new MirroringMqttBroker(serviceConfiguration);
