@@ -1,5 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using winlink.cms.data;
+using winlink.cms.mqtt.config;
 
 namespace winlink.cms.mqtt
 {
@@ -19,7 +21,14 @@ namespace winlink.cms.mqtt
             })
             .ConfigureServices((hostContext, services) =>
             {
-                services.AddHostedService<MirroringMqttBroker>();
+                services.AddHostedService<MirroringMqttBroker>((serviceProvider) =>
+                {
+                    // TBD: load config string from appsettings
+                    var cmsDatabase = new CMSDatabase("testMySSQLConnectionString");
+                    var cmsProperties = new CMSProperties(cmsDatabase);
+                    var serviceConfiguration = new DatabaseServiceConfiguration(cmsProperties);
+                    return new MirroringMqttBroker(serviceConfiguration);
+                });
             });
     }
 }

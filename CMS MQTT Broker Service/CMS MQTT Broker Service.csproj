@@ -34,5 +34,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CMS MQTT Broker\CMS MQTT Broker.csproj" />
     <ProjectReference Include="..\NLog.Targets.Gelf\NLog.Targets.Gelf.csproj" />
+    <ProjectReference Include="..\cms-database\CMSDatabase\CMSDatabase.csproj" />
+    <ProjectReference Include="..\BrokerConfiguration\BrokerConfiguration.csproj" />
   </ItemGroup>
 </Project>
