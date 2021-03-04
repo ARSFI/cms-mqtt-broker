@@ -22,6 +22,9 @@ namespace CMS_MQTT_Broker_Standalone
             var broker = new MirroringMqttBroker(new DatabaseServiceConfiguration(propertiesTable));
             var cancelToken = new CancellationToken();
             await broker.StartAsync(cancelToken);
+
+            Console.WriteLine("Press Enter to quit.");
+            _ = Console.ReadLine();
         }
     }
 }

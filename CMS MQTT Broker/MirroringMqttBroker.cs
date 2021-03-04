@@ -26,6 +26,11 @@ namespace winlink.cms.mqtt
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            if (!WindowsServiceHelpers.IsWindowsService())
+            {
+                Console.WriteLine($"Worker running at: {DateTimeOffset.Now}");
+            }
+
             // Create MQTT factory.
             var mqttFactory = new MqttFactory();
 
@@ -58,27 +63,37 @@ namespace winlink.cms.mqtt
                     serviceConfiguration.OtherServicePort);
 
             //!!! below must be able to sustain a disconnect and recover
-
-            await Task.Delay(serviceConfiguration.ConnectionDelayInMilliseconds).ContinueWith(async (arg) =>
+            mqttClient.UseConnectedHandler((eventArgs) =>
             {
-                while (!stoppingToken.IsCancellationRequested)
-                {
-                    await mqttClient.ConnectAsync(mqttClientOptionsBuilder.Build(), stoppingToken);
-                }
+                Console.WriteLine("Connected to " + serviceConfiguration.OtherServiceHostname + " port " + serviceConfiguration.OtherServicePort.ToString());
             });
 
+            mqttClient.UseDisconnectedHandler(async (eventArgs) =>
+            {
+                await Task.Delay(serviceConfiguration.ConnectionDelayInMilliseconds).ContinueWith(async (arg) =>
+                {
+                    // Reconnect on disconnect.
+                    if (!stoppingToken.IsCancellationRequested)
+                    {
+                        Console.WriteLine("Reconnecting to " + serviceConfiguration.OtherServiceHostname + " port " + serviceConfiguration.OtherServicePort.ToString());
+                        await mqttClient.ConnectAsync(mqttClientOptionsBuilder.Build(), stoppingToken);
+                    }
+                });
+            });
+
+            Console.WriteLine("Waiting " + serviceConfiguration.ConnectionDelayInMilliseconds.ToString() + " milliseconds before client connect");
+            await Task.Delay(serviceConfiguration.ConnectionDelayInMilliseconds);
+            Console.WriteLine("Connecting to " + serviceConfiguration.OtherServiceHostname + " port " + serviceConfiguration.OtherServicePort.ToString());
+            await mqttClient.ConnectAsync(mqttClientOptionsBuilder.Build(), stoppingToken);
+            
             while (!stoppingToken.IsCancellationRequested)
             {
-                if (!WindowsServiceHelpers.IsWindowsService())
-                {
-                    Console.WriteLine($"Worker running at: {DateTimeOffset.Now}");
-                }
-
-                //!!!
-                
                 await Task.Delay(serviceConfiguration.StoppingDelayInMilliseconds, stoppingToken);
             }
+
+            mqttClient.DisconnectedHandler = null;
             await mqttServer.StopAsync();
+            await mqttClient.DisconnectAsync();
         }
     }
 }
