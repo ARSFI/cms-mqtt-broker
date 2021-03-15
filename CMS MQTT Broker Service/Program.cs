@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using winlink.cms.data;
@@ -17,7 +18,9 @@ namespace winlink.cms.mqtt
             .UseWindowsService()
             .ConfigureAppConfiguration((context, config) =>
             {
-                context.Properties["cmsDatabase"] = new CMSDatabase(context.Configuration["sqlDatabaseConnectionString"]);
+                IConfigurationRoot configurationRoot = config.Build();
+                var connString = configurationRoot.GetValue<string>("sqlDatabaseConnectionString");
+                context.Properties["cmsDatabase"] = new CMSDatabase(connectionString: connString);
             })
             .ConfigureServices((hostContext, services) =>
             {
