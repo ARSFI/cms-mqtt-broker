@@ -1,0 +1,12 @@
+﻿Using PowerShell 7.x
+
+Install with:
+New-Service -Name "CMS MQTT Broker Service" -Description "Mirroring MQTT Broker" -StartupType "Manual" -BinaryPathName "[path-to]\CMS MQTT Broker Service.exe"
+
+//New-Service -Name "CMS MQTT Broker Service" -Description "Mirroring MQTT Broker" -StartupType "Manual" -BinaryPathName "D:\Projects\cms-mqtt-broker\CMS MQTT Broker Service\bin\Release\net5.0\CMS MQTT Broker Service.exe"
+
+Uninstall with:
+Remove-Service -Name "CMS MQTT Broker Service"
+
+Start service using service manager or:
+Start-Service -Name "CMS MQTT Broker Service"
