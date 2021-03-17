@@ -9,8 +9,8 @@ A multi-server cluster of MQTT brokers to enable sharing information between Win
 * Must run as windows service
 * Relay messages received to the other broker(s)
 * Configurable relay destination(s)
-* Configuration stored in MySQL database (no local config files)
-  * See cms-database repo
+* ~~Configuration stored in MySQL database (no local config files)
+  * ~~See cms-database repo
 
 # Notes
 * Possibly use MQTTNet library
