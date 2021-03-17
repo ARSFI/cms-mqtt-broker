@@ -38,6 +38,11 @@ namespace winlink.cms.mqtt
             var optionsBuilder = new MqttServerOptionsBuilder()
                 .WithDefaultEndpointPort(serviceConfiguration.ThisServicePort)
                 .WithClientId(serviceConfiguration.ThisClientId)
+                .WithConnectionValidator(connection =>
+                {
+                    //TODO:
+                    _log.Debug($"New connection - ClientId: {connection.ClientId}");
+                })
                 .WithApplicationMessageInterceptor((arg) =>
                 {
                     arg.AcceptPublish = true;
