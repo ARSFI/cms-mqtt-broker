@@ -7,6 +7,7 @@ using MQTTnet.Client;
 using MQTTnet.Client.Options;
 using MQTTnet.Server;
 using Microsoft.Extensions.Hosting.WindowsServices;
+using MQTTnet.Protocol;
 using NLog;
 using winlink.cms.mqtt.config;
 
@@ -15,6 +16,8 @@ namespace winlink.cms.mqtt
     public class MirroringMqttBroker : BackgroundService
     {
         private readonly Logger _log = LogManager.GetCurrentClassLogger();
+        //to monitor in real-time use Log2Console w/ udp receiver configured to listen on port 7071
+
         static IMqttClient mqttClient;
 
         private IServiceConfiguration serviceConfiguration;
@@ -28,11 +31,14 @@ namespace winlink.cms.mqtt
         {
             if (!WindowsServiceHelpers.IsWindowsService())
             {
-                Console.WriteLine($"Worker running at: {DateTimeOffset.Now}");
+                Console.WriteLine($"Broker running at: {DateTimeOffset.Now}");
+                _log.Info($"Broker running at: {DateTimeOffset.Now}");
             }
 
             // Create MQTT factory.
             var mqttFactory = new MqttFactory();
+
+            //TODO: Need to implement websocket listener (port 9001)
 
             // Create options
             var optionsBuilder = new MqttServerOptionsBuilder()
@@ -40,7 +46,10 @@ namespace winlink.cms.mqtt
                 .WithClientId(serviceConfiguration.ThisClientId)
                 .WithConnectionValidator(connection =>
                 {
-                    //TODO:
+                    //TODO: Possibly implement basic auth -- not sure what type of credential store would be used
+
+                    connection.ReasonCode = MqttConnectReasonCode.Success;
+
                     _log.Debug($"New connection - ClientId: {connection.ClientId}");
                 })
                 .WithApplicationMessageInterceptor((arg) =>
