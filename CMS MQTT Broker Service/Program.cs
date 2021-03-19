@@ -18,7 +18,8 @@ namespace winlink.cms.mqtt
             .ConfigureAppConfiguration((context, config) =>
             {
                 IConfigurationRoot configurationRoot = config.Build();
-                var serviceConfiguration = new ServiceConfiguration(configurationRoot);
+                var serviceConfiguration = new ServiceConfiguration();
+                configurationRoot.Bind("BrokerConfiguration", serviceConfiguration);
                 context.Properties["serviceConfiguration"] = serviceConfiguration;
             })
             .ConfigureServices((hostContext, services) =>

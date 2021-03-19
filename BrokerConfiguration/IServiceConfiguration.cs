@@ -5,7 +5,7 @@ namespace winlink.cms.mqtt.config
     public interface IServiceConfiguration
     {
         // Our client ID for communication with the other broker.
-        string LocalClientId { get; }
+        string ClientId { get; }
 
         // This broker's listening port.
         int LocalMqttBrokerTcpPort { get; }

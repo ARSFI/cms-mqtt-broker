@@ -43,7 +43,7 @@ namespace winlink.cms.mqtt
             // Create options
             var optionsBuilder = new MqttServerOptionsBuilder()
                 .WithDefaultEndpointPort(serviceConfiguration.LocalMqttBrokerTcpPort)
-                .WithClientId(serviceConfiguration.LocalClientId)
+                .WithClientId(serviceConfiguration.ClientId)
                 .WithConnectionValidator(connection =>
                 {
                     //TODO: Possibly implement basic auth -- not sure what type of credential store would be used
@@ -57,7 +57,7 @@ namespace winlink.cms.mqtt
                     arg.AcceptPublish = true;
 
                     // Avoid loops by not mirroring messages from other servers.
-                    if (mqttClient.IsConnected &&  arg.ClientId != serviceConfiguration.LocalClientId)
+                    if (mqttClient.IsConnected &&  arg.ClientId != serviceConfiguration.ClientId)
                     {
                         // Mirror message on other server.
                         mqttClient.PublishAsync(arg.ApplicationMessage);
@@ -77,7 +77,7 @@ namespace winlink.cms.mqtt
             // Connect to the other server after a delay.
             mqttClient = mqttFactory.CreateMqttClient();
             var mqttClientOptionsBuilder = new MqttClientOptionsBuilder()
-                .WithClientId(serviceConfiguration.LocalClientId)
+                .WithClientId(serviceConfiguration.ClientId)
                 .WithTcpServer(
                     serviceConfiguration.RemoteMqttBrokers[0].Host,
                     serviceConfiguration.RemoteMqttBrokers[0].Port);
