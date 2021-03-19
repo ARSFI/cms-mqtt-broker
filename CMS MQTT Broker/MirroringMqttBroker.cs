@@ -42,8 +42,8 @@ namespace winlink.cms.mqtt
 
             // Create options
             var optionsBuilder = new MqttServerOptionsBuilder()
-                .WithDefaultEndpointPort(serviceConfiguration.ThisServicePort)
-                .WithClientId(serviceConfiguration.ThisClientId)
+                .WithDefaultEndpointPort(serviceConfiguration.LocalMqttBrokerTcpPort)
+                .WithClientId(serviceConfiguration.LocalClientId)
                 .WithConnectionValidator(connection =>
                 {
                     //TODO: Possibly implement basic auth -- not sure what type of credential store would be used
@@ -57,7 +57,7 @@ namespace winlink.cms.mqtt
                     arg.AcceptPublish = true;
 
                     // Avoid loops by not mirroring messages from other servers.
-                    if (mqttClient.IsConnected &&  arg.ClientId != serviceConfiguration.ThisClientId)
+                    if (mqttClient.IsConnected &&  arg.ClientId != serviceConfiguration.LocalClientId)
                     {
                         // Mirror message on other server.
                         mqttClient.PublishAsync(arg.ApplicationMessage);
@@ -72,45 +72,47 @@ namespace winlink.cms.mqtt
             var mqttServer = mqttFactory.CreateMqttServer();
             await mqttServer.StartAsync(optionsBuilder.Build());
             
+            //TODO: modify to do this for all remote brokers !!!
+
             // Connect to the other server after a delay.
             mqttClient = mqttFactory.CreateMqttClient();
             var mqttClientOptionsBuilder = new MqttClientOptionsBuilder()
-                .WithClientId(serviceConfiguration.ThisClientId)
+                .WithClientId(serviceConfiguration.LocalClientId)
                 .WithTcpServer(
-                    serviceConfiguration.OtherServiceHostname,
-                    serviceConfiguration.OtherServicePort);
+                    serviceConfiguration.RemoteMqttBrokers[0].Host,
+                    serviceConfiguration.RemoteMqttBrokers[0].Port);
 
             //sustain a disconnect and recover
             mqttClient.UseConnectedHandler((eventArgs) =>
             {
-                Console.WriteLine("Connected to " + serviceConfiguration.OtherServiceHostname + " port " + serviceConfiguration.OtherServicePort.ToString());
-                _log.Info($"Connected to {serviceConfiguration.OtherServiceHostname} port {serviceConfiguration.OtherServicePort}");
+                Console.WriteLine("Connected to " + serviceConfiguration.RemoteMqttBrokers[0].Host + " port " + serviceConfiguration.RemoteMqttBrokers[0].Port);
+                _log.Info($"Connected to {serviceConfiguration.RemoteMqttBrokers[0].Host} port {serviceConfiguration.RemoteMqttBrokers[0].Port}");
             });
 
             mqttClient.UseDisconnectedHandler(async (eventArgs) =>
             {
-                await Task.Delay(serviceConfiguration.ConnectionDelayInMilliseconds).ContinueWith(async (arg) =>
+                await Task.Delay(ServiceConfiguration.ConnectionDelayInMilliseconds).ContinueWith(async (arg) =>
                 {
                     // Reconnect on disconnect.
                     if (!stoppingToken.IsCancellationRequested)
                     {
-                        Console.WriteLine("Reconnecting to " + serviceConfiguration.OtherServiceHostname + " port " + serviceConfiguration.OtherServicePort.ToString());
-                        _log.Debug($"Reconnecting to {serviceConfiguration.OtherServiceHostname} port {serviceConfiguration.OtherServicePort}");
+                        Console.WriteLine("Reconnecting to " + serviceConfiguration.RemoteMqttBrokers[0].Host + " port " + serviceConfiguration.RemoteMqttBrokers[0].Port.ToString());
+                        _log.Debug($"Reconnecting to {serviceConfiguration.RemoteMqttBrokers[0].Host} port {serviceConfiguration.RemoteMqttBrokers[0].Port}");
                         await mqttClient.ConnectAsync(mqttClientOptionsBuilder.Build(), stoppingToken);
                     }
                 });
             });
 
-            Console.WriteLine("Waiting " + serviceConfiguration.ConnectionDelayInMilliseconds.ToString() + " milliseconds before client connect");
-            _log.Trace($"Waiting {serviceConfiguration.ConnectionDelayInMilliseconds} milliseconds before client connect");
-            await Task.Delay(serviceConfiguration.ConnectionDelayInMilliseconds);
-            Console.WriteLine("Connecting to " + serviceConfiguration.OtherServiceHostname + " port " + serviceConfiguration.OtherServicePort.ToString());
-            _log.Info($"Connecting to {serviceConfiguration.OtherServiceHostname} port {serviceConfiguration.OtherServicePort}");
+            Console.WriteLine("Waiting " + ServiceConfiguration.ConnectionDelayInMilliseconds.ToString() + " milliseconds before client connect");
+            _log.Trace($"Waiting {ServiceConfiguration.ConnectionDelayInMilliseconds} milliseconds before client connect");
+            await Task.Delay(ServiceConfiguration.ConnectionDelayInMilliseconds);
+            Console.WriteLine("Connecting to " + serviceConfiguration.RemoteMqttBrokers[0].Host + " port " + serviceConfiguration.RemoteMqttBrokers[0].Port.ToString());
+            _log.Info($"Connecting to {serviceConfiguration.RemoteMqttBrokers[0].Host} port {serviceConfiguration.RemoteMqttBrokers[0].Port}");
             await mqttClient.ConnectAsync(mqttClientOptionsBuilder.Build(), stoppingToken);
             
             while (!stoppingToken.IsCancellationRequested)
             {
-                await Task.Delay(serviceConfiguration.StoppingDelayInMilliseconds, stoppingToken);
+                await Task.Delay(ServiceConfiguration.StoppingDelayInMilliseconds, stoppingToken);
             }
 
             mqttClient.DisconnectedHandler = null;

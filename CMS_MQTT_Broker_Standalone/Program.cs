@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using winlink.cms.mqtt;
 using winlink.cms.mqtt.config;
-using winlink.cms.data;
 
 namespace CMS_MQTT_Broker_Standalone
 {
@@ -17,9 +16,7 @@ namespace CMS_MQTT_Broker_Standalone
                 return;
             }
 
-            var database = new CMSDatabase(args[1]);
-            var propertiesTable = new CMSProperties(database);
-            var broker = new MirroringMqttBroker(new DatabaseServiceConfiguration(propertiesTable));
+            var broker = new MirroringMqttBroker(new TestServiceConfiguration());
             var cancelToken = new CancellationToken();
             await broker.StartAsync(cancelToken);
 

@@ -1,24 +1,19 @@
-﻿using System;
+﻿using System.Collections.Generic;
+
 namespace winlink.cms.mqtt.config
 {
     public interface IServiceConfiguration
     {
-        // This broker's listening port.
-        int ThisServicePort { get; }
-
-        // The other broker's IP address/hostname.
-        string OtherServiceHostname { get; }
-
-        // The other broker's listening port.
-        int OtherServicePort { get; }
-
         // Our client ID for communication with the other broker.
-        string ThisClientId { get; }
+        string LocalClientId { get; }
 
-        // Delay in milliseconds before attempting contact with other broker.
-        int ConnectionDelayInMilliseconds { get; }
+        // This broker's listening port.
+        int LocalMqttBrokerTcpPort { get; }
 
-        // Delay in milliseconds before stopping contact with other broker.
-        int StoppingDelayInMilliseconds { get; }
+        // This broker's websocket listening port.
+        int LocalMqttBrokerWebSocketPort { get; }
+
+        // The other broker(s) IP address/hostname, etc.
+        public List<RemoteMqttBroker> RemoteMqttBrokers { get; }
     }
 }
