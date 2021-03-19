@@ -8,7 +8,7 @@ namespace winlink.cms.mqtt.config
         {
         }
 
-        public string LocalClientId => "cms-a";
+        public string ClientId => "cms-a";
         public int LocalMqttBrokerTcpPort => 1883;
         public int LocalMqttBrokerWebSocketPort => 9001;
         public List<RemoteMqttBroker> RemoteMqttBrokers

@@ -8,7 +8,6 @@
   <ItemGroup>
     <ProjectReference Include="..\CMS MQTT Broker\CMS MQTT Broker.csproj" />
     <ProjectReference Include="..\BrokerConfiguration\BrokerConfiguration.csproj" />
-    <ProjectReference Include="..\cms-database\CMSDatabase\CMSDatabase.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Runtime" Version="4.3.1" />

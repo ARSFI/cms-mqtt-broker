@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
+﻿using System.Collections.Generic;
 
 namespace winlink.cms.mqtt.config
 {

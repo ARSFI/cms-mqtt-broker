@@ -2,12 +2,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting.WindowsServices;
 using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Client.Options;
-using MQTTnet.Server;
-using Microsoft.Extensions.Hosting.WindowsServices;
 using MQTTnet.Protocol;
+using MQTTnet.Server;
 using NLog;
 using winlink.cms.mqtt.config;
 
@@ -20,7 +20,7 @@ namespace winlink.cms.mqtt
 
         static IMqttClient mqttClient;
 
-        private IServiceConfiguration serviceConfiguration;
+        private readonly IServiceConfiguration serviceConfiguration;
 
         public MirroringMqttBroker(IServiceConfiguration configuration)
         {

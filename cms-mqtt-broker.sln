@@ -13,6 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMS_MQTT_Broker_Standalone"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrokerConfiguration", "BrokerConfiguration\BrokerConfiguration.csproj", "{60B7DB52-0D33-44BA-B10C-7C2332E276C7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".tests", ".tests", "{DAF732BA-C7A6-4410-9376-0511B8EB849A}"
+	ProjectSection(SolutionItems) = preProject
+		Tests\WebSocketTest.html = Tests\WebSocketTest.html
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +47,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{05F8CFE3-04FA-45D3-8E81-A642FB9E1ABA} = {DAF732BA-C7A6-4410-9376-0511B8EB849A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {346EDF32-0094-4FB8-8C43-29CE4792F3ED}
