@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CMS MQTT Broker\CMS MQTT Broker.csproj" />
-    <ProjectReference Include="..\BrokerConfiguration\BrokerConfiguration.csproj" />
+    <ProjectReference Include="..\Mirroring MQTT Broker Configuration\Mirroring MQTT Broker Configuration.csproj" />
+    <ProjectReference Include="..\Mirroring MQTT Broker\Mirroring MQTT Broker.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Runtime" Version="4.3.1" />

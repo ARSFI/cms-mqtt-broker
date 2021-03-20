@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.808.10
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMS MQTT Broker", "CMS MQTT Broker\CMS MQTT Broker.csproj", "{71B715FF-27E1-40C0-ADCB-F47549CA2667}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mirroring MQTT Broker", "Mirroring MQTT Broker\Mirroring MQTT Broker.csproj", "{71B715FF-27E1-40C0-ADCB-F47549CA2667}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMS MQTT Broker Service", "CMS MQTT Broker Service\CMS MQTT Broker Service.csproj", "{56CB1CBF-72E4-4EEF-8792-049B4140A05D}"
 EndProject
@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NLog.Targets.Gelf", "NLog.T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMS_MQTT_Broker_Standalone", "CMS_MQTT_Broker_Standalone\CMS_MQTT_Broker_Standalone.csproj", "{05F8CFE3-04FA-45D3-8E81-A642FB9E1ABA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrokerConfiguration", "BrokerConfiguration\BrokerConfiguration.csproj", "{60B7DB52-0D33-44BA-B10C-7C2332E276C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mirroring MQTT Broker Configuration", "Mirroring MQTT Broker Configuration\Mirroring MQTT Broker Configuration.csproj", "{60B7DB52-0D33-44BA-B10C-7C2332E276C7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".tests", ".tests", "{DAF732BA-C7A6-4410-9376-0511B8EB849A}"
 	ProjectSection(SolutionItems) = preProject

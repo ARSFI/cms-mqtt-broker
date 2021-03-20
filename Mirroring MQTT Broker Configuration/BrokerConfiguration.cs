@@ -1,22 +1,22 @@
 ﻿using System.Collections.Generic;
 
-namespace winlink.cms.mqtt.config
+namespace mirroring.mqtt.broker.config
 {
-    public class ServiceConfiguration : IServiceConfiguration
+    public class BrokerConfiguration : IBrokerConfiguration
     {
         public const int ConnectionDelayInMilliseconds = 5000;
         public const int StoppingDelayInMilliseconds = 2000;
 
-        public ServiceConfiguration()
+        public BrokerConfiguration()
         {
-            RemoteMqttBrokers = new List<RemoteMqttBroker>();
+            RemoteMqttBrokers = new List<RemoteBrokerConfiuration>();
         }
 
         public string ClientId { get; set; }
         public int LocalMqttBrokerTcpPort { get; set; }
         public int LocalMqttBrokerWebSocketPort { get; set; }
 
-        public List<RemoteMqttBroker> RemoteMqttBrokers { get; private set; }
+        public List<RemoteBrokerConfiuration> RemoteMqttBrokers { get; private set; }
     }
 
 }

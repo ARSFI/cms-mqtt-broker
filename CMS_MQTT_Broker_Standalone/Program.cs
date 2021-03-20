@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using winlink.cms.mqtt;
-using winlink.cms.mqtt.config;
+using mirroring.mqtt.broker;
 
 namespace CMS_MQTT_Broker_Standalone
 {

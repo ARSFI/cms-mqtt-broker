@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>winlink.cms.mqtt</RootNamespace>
+    <RootNamespace>mirroring.mqtt.broker</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Mirroring MQTT Broker Configuration\Mirroring MQTT Broker Configuration.csproj" />
     <ProjectReference Include="..\NLog.Targets.Gelf\NLog.Targets.Gelf.csproj" />
-    <ProjectReference Include="..\BrokerConfiguration\BrokerConfiguration.csproj" />
   </ItemGroup>
 
 </Project>

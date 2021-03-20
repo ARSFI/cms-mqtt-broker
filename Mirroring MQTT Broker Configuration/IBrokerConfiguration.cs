@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace winlink.cms.mqtt.config
+namespace mirroring.mqtt.broker.config
 {
-    public interface IServiceConfiguration
+    public interface IBrokerConfiguration
     {
         // Our client ID for communication with the other broker.
         string ClientId { get; }
@@ -14,6 +14,6 @@ namespace winlink.cms.mqtt.config
         int LocalMqttBrokerWebSocketPort { get; }
 
         // The other broker(s) IP address/hostname, etc.
-        public List<RemoteMqttBroker> RemoteMqttBrokers { get; }
+        public List<RemoteBrokerConfiuration> RemoteMqttBrokers { get; }
     }
 }

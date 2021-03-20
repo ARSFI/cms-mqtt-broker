@@ -1,6 +1,6 @@
-﻿namespace winlink.cms.mqtt.config
+﻿namespace mirroring.mqtt.broker.config
 {
-    public class RemoteMqttBroker
+    public class RemoteBrokerConfiuration
     {
         public string Host { get; set; }
         public int Port { get; set; }

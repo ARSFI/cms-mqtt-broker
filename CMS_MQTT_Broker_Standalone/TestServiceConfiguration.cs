@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using mirroring.mqtt.broker.config;
 
-namespace winlink.cms.mqtt.config
+namespace CMS_MQTT_Broker_Standalone
 {
-    public class TestServiceConfiguration : IServiceConfiguration
+    public class TestServiceConfiguration : IBrokerConfiguration
     {
         public TestServiceConfiguration()
         {
@@ -11,12 +12,12 @@ namespace winlink.cms.mqtt.config
         public string ClientId => "CMS-A";
         public int LocalMqttBrokerTcpPort => 1883;
         public int LocalMqttBrokerWebSocketPort => 9001;
-        public List<RemoteMqttBroker> RemoteMqttBrokers
+        public List<RemoteBrokerConfiuration> RemoteMqttBrokers
         {
             get
             {
-                var rm = new RemoteMqttBroker { Host = "localhost", Port = 1883 };
-                return new List<RemoteMqttBroker> { rm };
+                var rm = new RemoteBrokerConfiuration { Host = "localhost", Port = 1883 };
+                return new List<RemoteBrokerConfiuration> { rm };
             }
         }
     }
