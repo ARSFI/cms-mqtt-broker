@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using mirroring.mqtt.broker;
 using mirroring.mqtt.broker.config;
 
@@ -16,6 +17,11 @@ namespace winlink.cms.mqtt
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
             .UseWindowsService()
+            .ConfigureLogging(logging =>
+            {
+                // Remove default logging providers - just using NLog
+                logging.ClearProviders();
+            })
             .ConfigureAppConfiguration((context, config) =>
             {
                 IConfigurationRoot configurationRoot = config.Build();
