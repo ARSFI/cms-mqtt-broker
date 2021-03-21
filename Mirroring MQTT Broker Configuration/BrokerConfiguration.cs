@@ -9,14 +9,14 @@ namespace mirroring.mqtt.broker.config
 
         public BrokerConfiguration()
         {
-            RemoteMqttBrokers = new List<RemoteBrokerConfiuration>();
+            RemoteMqttBrokers = new List<RemoteBrokerConfiguration>();
         }
 
         public string ClientId { get; set; }
         public int LocalMqttBrokerTcpPort { get; set; }
         public int LocalMqttBrokerWebSocketPort { get; set; }
 
-        public List<RemoteBrokerConfiuration> RemoteMqttBrokers { get; private set; }
+        public List<RemoteBrokerConfiguration> RemoteMqttBrokers { get; private set; }
     }
 
 }

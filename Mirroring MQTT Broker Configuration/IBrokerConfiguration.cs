@@ -14,6 +14,6 @@ namespace mirroring.mqtt.broker.config
         int LocalMqttBrokerWebSocketPort { get; }
 
         // The other broker(s) IP address/hostname, etc.
-        public List<RemoteBrokerConfiuration> RemoteMqttBrokers { get; }
+        public List<RemoteBrokerConfiguration> RemoteMqttBrokers { get; }
     }
 }

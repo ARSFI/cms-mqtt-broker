@@ -1,16 +1,22 @@
+using System;
+using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using mirroring.mqtt.broker;
 using mirroring.mqtt.broker.config;
+using NLog;
 
 namespace winlink.cms.mqtt
 {
     public class Program
     {
+        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+
         public static void Main(string[] args)
         {
+            Log.Info($"Starting {GetAssemblyName()} - v {GetAssemblyVersion()}");
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -37,6 +43,18 @@ namespace winlink.cms.mqtt
                     return new MirroringMqttBroker(serviceConfiguration);
                 });
             });
+
+        private static string GetAssemblyName()
+        {
+            return Assembly.GetExecutingAssembly().GetName().Name;
+        }
+
+        private static Version GetAssemblyVersion()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            return assembly.GetName().Version;
+        }
+
     }
 
 }

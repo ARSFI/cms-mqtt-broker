@@ -1,6 +1,6 @@
 ﻿namespace mirroring.mqtt.broker.config
 {
-    public class RemoteBrokerConfiuration
+    public class RemoteBrokerConfiguration
     {
         public string Host { get; set; }
         public int Port { get; set; }

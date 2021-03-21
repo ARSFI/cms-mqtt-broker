@@ -12,12 +12,12 @@ namespace CMS_MQTT_Broker_Standalone
         public string ClientId => "CMS-A";
         public int LocalMqttBrokerTcpPort => 1883;
         public int LocalMqttBrokerWebSocketPort => 9001;
-        public List<RemoteBrokerConfiuration> RemoteMqttBrokers
+        public List<RemoteBrokerConfiguration> RemoteMqttBrokers
         {
             get
             {
-                var rm = new RemoteBrokerConfiuration { Host = "localhost", Port = 1883 };
-                return new List<RemoteBrokerConfiuration> { rm };
+                var rm = new RemoteBrokerConfiguration { Host = "localhost", Port = 1883 };
+                return new List<RemoteBrokerConfiguration> { rm };
             }
         }
     }

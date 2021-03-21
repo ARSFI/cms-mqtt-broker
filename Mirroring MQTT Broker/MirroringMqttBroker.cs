@@ -16,7 +16,7 @@ namespace mirroring.mqtt.broker
 {
     public class MirroringMqttBroker : BackgroundService
     {
-        private readonly Logger _log = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
         private List<IMqttClient> _mqttClients;
         private List<IMqttClientOptions> _mqttClientOptions;
@@ -33,7 +33,7 @@ namespace mirroring.mqtt.broker
             {
                 Console.WriteLine($"MQTT Broker running at: {DateTimeOffset.Now}");
             }
-            _log.Info($"MQTT Broker running at: {DateTimeOffset.Now}");
+            Log.Info($"MQTT Broker running at: {DateTimeOffset.Now}");
 
             // Create MQTT factory.
             var mqttFactory = new MqttFactory();
@@ -48,7 +48,7 @@ namespace mirroring.mqtt.broker
                 {
                     //TODO: Possibly implement basic auth -- not sure what type of credential store would be used
                     connection.ReasonCode = MqttConnectReasonCode.Success;
-                    _log.Debug($"New connection - ClientId: {connection.ClientId}");
+                    Log.Debug($"New connection - ClientId: {connection.ClientId}");
                 })
                 .WithApplicationMessageInterceptor((arg) =>
                 {
@@ -68,7 +68,7 @@ namespace mirroring.mqtt.broker
 
                     //TODO: Temporary
                     var payload = System.Text.Encoding.UTF8.GetString(arg.ApplicationMessage.Payload);
-                    _log.Debug($"Received message : {arg.ApplicationMessage.Topic} / {payload}");
+                    Log.Debug($"Received message : {arg.ApplicationMessage.Topic} / {payload}");
                 });
 
             // Start a MQTT server.
@@ -92,7 +92,7 @@ namespace mirroring.mqtt.broker
                 mqttClient.UseConnectedHandler((eventArgs) =>
                 {
                     Console.WriteLine("Connected to " + clientConfig.Host + " port " + clientConfig.Port);
-                    _log.Info($"Connected to {clientConfig.Host} port {clientConfig.Port}");
+                    Log.Info($"Connected to {clientConfig.Host} port {clientConfig.Port}");
                 });
 
                 // Sustain a disconnect and recover
@@ -104,7 +104,7 @@ namespace mirroring.mqtt.broker
                         if (!stoppingToken.IsCancellationRequested)
                         {
                             Console.WriteLine("Reconnecting to " + clientConfig.Host + " port " + clientConfig);
-                            _log.Debug($"Reconnecting to {clientConfig.Host} port {clientConfig.Port}");
+                            Log.Debug($"Reconnecting to {clientConfig.Host} port {clientConfig.Port}");
                             await mqttClient.ConnectAsync(mqttClientOptionsBuilder.Build(), stoppingToken);
                         }
                     });
@@ -112,7 +112,7 @@ namespace mirroring.mqtt.broker
             }
 
             Console.WriteLine("Waiting " + BrokerConfiguration.ConnectionDelayInMilliseconds.ToString() + " milliseconds before client connect");
-            _log.Trace($"Waiting {BrokerConfiguration.ConnectionDelayInMilliseconds} milliseconds before client connect");
+            Log.Trace($"Waiting {BrokerConfiguration.ConnectionDelayInMilliseconds} milliseconds before client connect");
             await Task.Delay(BrokerConfiguration.ConnectionDelayInMilliseconds);
 
             // Connect to clients
@@ -120,7 +120,7 @@ namespace mirroring.mqtt.broker
             foreach (var clientConfig in _serviceConfiguration.RemoteMqttBrokers)
             {
                 Console.WriteLine("Connecting to " + clientConfig.Host + " port " + clientConfig.Port.ToString());
-                _log.Info($"Connecting to {clientConfig.Host} port {clientConfig.Port}");
+                Log.Info($"Connecting to {clientConfig.Host} port {clientConfig.Port}");
                 await _mqttClients[index].ConnectAsync(_mqttClientOptions[index]);
                 index++;
             }
