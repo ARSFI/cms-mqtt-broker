@@ -46,9 +46,17 @@ namespace mirroring.mqtt.broker
                 .WithClientId(_serviceConfiguration.ClientId)
                 .WithConnectionValidator(connection =>
                 {
-                    //TODO: Possibly implement basic auth -- not sure what type of credential store would be used
-                    connection.ReasonCode = MqttConnectReasonCode.Success;
-                    Log.Debug($"New connection - ClientId: {connection.ClientId}");
+                    if (connection.Username == _serviceConfiguration.LocalMqttBrokerUsername &&
+                        connection.Password == _serviceConfiguration.LocalMqttBrokerPassword)
+                    {
+                        connection.ReasonCode = MqttConnectReasonCode.Success;
+                        Log.Debug($"New connection - ClientId: {connection.ClientId}");
+                    }
+                    else
+                    {
+                        connection.ReasonCode = MqttConnectReasonCode.BadUserNameOrPassword;
+                        Log.Debug($"Invalid connection attempt - ClientId: {connection.ClientId}, Username: {connection.Username}");
+                    }
                 })
                 .WithApplicationMessageInterceptor((arg) =>
                 {

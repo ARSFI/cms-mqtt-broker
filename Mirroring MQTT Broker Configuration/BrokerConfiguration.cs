@@ -16,6 +16,10 @@ namespace mirroring.mqtt.broker.config
         public int LocalMqttBrokerTcpPort { get; set; }
         public int LocalMqttBrokerWebSocketPort { get; set; }
 
+        public string LocalMqttBrokerUsername { get; set; }
+
+        public string LocalMqttBrokerPassword { get; set; }
+
         public List<RemoteBrokerConfiguration> RemoteMqttBrokers { get; private set; }
     }
 

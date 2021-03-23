@@ -12,6 +12,9 @@ namespace CMS_MQTT_Broker_Standalone
         public string ClientId => "CMS-A";
         public int LocalMqttBrokerTcpPort => 1883;
         public int LocalMqttBrokerWebSocketPort => 9001;
+        public string LocalMqttBrokerUsername => "testuser";
+        public string LocalMqttBrokerPassword => "testpassword";
+
         public List<RemoteBrokerConfiguration> RemoteMqttBrokers
         {
             get

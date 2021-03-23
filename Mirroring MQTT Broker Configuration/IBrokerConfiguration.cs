@@ -13,6 +13,12 @@ namespace mirroring.mqtt.broker.config
         // This broker's websocket listening port.
         int LocalMqttBrokerWebSocketPort { get; }
 
+        // The username to use to connect to this broker.
+        string LocalMqttBrokerUsername { get; }
+
+        // The password to use to connect to this broker.
+        string LocalMqttBrokerPassword { get; }
+
         // The other broker(s) IP address/hostname, etc.
         public List<RemoteBrokerConfiguration> RemoteMqttBrokers { get; }
     }
