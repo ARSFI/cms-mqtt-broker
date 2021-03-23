@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Hosting.WindowsServices;
 using mirroring.mqtt.broker.config;
 using MQTTnet;
 using MQTTnet.Client;
@@ -29,10 +28,6 @@ namespace mirroring.mqtt.broker
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            if (!WindowsServiceHelpers.IsWindowsService())
-            {
-                Console.WriteLine($"MQTT Broker running at: {DateTimeOffset.Now}");
-            }
             Log.Info($"MQTT Broker running at: {DateTimeOffset.Now}");
 
             // Create MQTT factory.
@@ -46,16 +41,16 @@ namespace mirroring.mqtt.broker
                 .WithClientId(_serviceConfiguration.ClientId)
                 .WithConnectionValidator(connection =>
                 {
-                    if (connection.Username == _serviceConfiguration.LocalMqttBrokerUsername &&
+                    if (!_serviceConfiguration.RequireAuthentication || connection.Username == _serviceConfiguration.LocalMqttBrokerUsername &&
                         connection.Password == _serviceConfiguration.LocalMqttBrokerPassword)
                     {
                         connection.ReasonCode = MqttConnectReasonCode.Success;
-                        Log.Debug($"New connection - ClientId: {connection.ClientId}");
+                        Log.Info($"New connection - ClientId: {connection.ClientId}");
                     }
                     else
                     {
                         connection.ReasonCode = MqttConnectReasonCode.BadUserNameOrPassword;
-                        Log.Debug($"Invalid connection attempt - ClientId: {connection.ClientId}, Username: {connection.Username}");
+                        Log.Info($"Invalid connection attempt - ClientId: {connection.ClientId}, Username: {connection.Username}");
                     }
                 })
                 .WithApplicationMessageInterceptor((arg) =>
@@ -86,6 +81,9 @@ namespace mirroring.mqtt.broker
             // Create clients
             _mqttClients = new List<IMqttClient>();
             _mqttClientOptions = new List<IMqttClientOptions>();
+
+            //BUG: Won't continue past a failing remote broker
+
             foreach (var clientConfig in _serviceConfiguration.RemoteMqttBrokers)
             {
                 var mqttClient = mqttFactory.CreateMqttClient();
@@ -99,11 +97,10 @@ namespace mirroring.mqtt.broker
 
                 mqttClient.UseConnectedHandler((eventArgs) =>
                 {
-                    Console.WriteLine("Connected to " + clientConfig.Host + " port " + clientConfig.Port);
                     Log.Info($"Connected to {clientConfig.Host} port {clientConfig.Port}");
                 });
 
-                // Sustain a disconnect and recover
+                // Sustain a disconnect and reconnect
                 mqttClient.UseDisconnectedHandler(async (eventArgs) =>
                 {
                     await Task.Delay(BrokerConfiguration.ConnectionDelayInMilliseconds).ContinueWith(async (arg) =>
@@ -111,23 +108,20 @@ namespace mirroring.mqtt.broker
                         // Reconnect on disconnect.
                         if (!stoppingToken.IsCancellationRequested)
                         {
-                            Console.WriteLine("Reconnecting to " + clientConfig.Host + " port " + clientConfig);
-                            Log.Debug($"Reconnecting to {clientConfig.Host} port {clientConfig.Port}");
+                            Log.Info($"Reconnecting to {clientConfig.Host} port {clientConfig.Port}");
                             await mqttClient.ConnectAsync(mqttClientOptionsBuilder.Build(), stoppingToken);
                         }
                     });
                 });
             }
 
-            Console.WriteLine("Waiting " + BrokerConfiguration.ConnectionDelayInMilliseconds.ToString() + " milliseconds before client connect");
-            Log.Trace($"Waiting {BrokerConfiguration.ConnectionDelayInMilliseconds} milliseconds before client connect");
+            Log.Debug($"Waiting {BrokerConfiguration.ConnectionDelayInMilliseconds} milliseconds before connecting to remote brokers");
             await Task.Delay(BrokerConfiguration.ConnectionDelayInMilliseconds);
 
             // Connect to clients
             int index = 0;
             foreach (var clientConfig in _serviceConfiguration.RemoteMqttBrokers)
             {
-                Console.WriteLine("Connecting to " + clientConfig.Host + " port " + clientConfig.Port.ToString());
                 Log.Info($"Connecting to {clientConfig.Host} port {clientConfig.Port}");
                 await _mqttClients[index].ConnectAsync(_mqttClientOptions[index]);
                 index++;
@@ -140,7 +134,7 @@ namespace mirroring.mqtt.broker
 
             // Disconnect from clients
             index = 0;
-            foreach (var clientConfig in _serviceConfiguration.RemoteMqttBrokers)
+            foreach (var unused in _serviceConfiguration.RemoteMqttBrokers)
             {
                 _mqttClients[index].DisconnectedHandler = null;
                 await _mqttClients[index].DisconnectAsync();

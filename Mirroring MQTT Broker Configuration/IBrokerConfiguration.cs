@@ -13,6 +13,9 @@ namespace mirroring.mqtt.broker.config
         // This broker's websocket listening port.
         int LocalMqttBrokerWebSocketPort { get; }
 
+        // Flag to control use of client authentication
+        bool RequireAuthentication { get; }
+
         // The username to use to connect to this broker.
         string LocalMqttBrokerUsername { get; }
 
