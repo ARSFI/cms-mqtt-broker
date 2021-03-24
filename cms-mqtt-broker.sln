@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mirroring MQTT Broker", "Mi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMS MQTT Broker Service", "CMS MQTT Broker Service\CMS MQTT Broker Service.csproj", "{56CB1CBF-72E4-4EEF-8792-049B4140A05D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NLog.Targets.Gelf", "NLog.Targets.Gelf\NLog.Targets.Gelf.csproj", "{DA318857-FCCD-45F3-88F6-F3E650EA88CE}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMS_MQTT_Broker_Standalone", "CMS_MQTT_Broker_Standalone\CMS_MQTT_Broker_Standalone.csproj", "{05F8CFE3-04FA-45D3-8E81-A642FB9E1ABA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mirroring MQTT Broker Configuration", "Mirroring MQTT Broker Configuration\Mirroring MQTT Broker Configuration.csproj", "{60B7DB52-0D33-44BA-B10C-7C2332E276C7}"
@@ -17,6 +15,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".tests", ".tests", "{DAF732
 	ProjectSection(SolutionItems) = preProject
 		Tests\WebSocketTest.html = Tests\WebSocketTest.html
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "submodules", "submodules", "{784B13AF-A321-4540-9B08-2709857B197F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NLog.Targets.Gelf", "NLog.Targets.Gelf\NLog.Targets.Gelf.csproj", "{25CB7EF0-5667-4A3A-B419-CE05DE7184FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,10 +34,6 @@ Global
 		{56CB1CBF-72E4-4EEF-8792-049B4140A05D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56CB1CBF-72E4-4EEF-8792-049B4140A05D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56CB1CBF-72E4-4EEF-8792-049B4140A05D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DA318857-FCCD-45F3-88F6-F3E650EA88CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DA318857-FCCD-45F3-88F6-F3E650EA88CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DA318857-FCCD-45F3-88F6-F3E650EA88CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DA318857-FCCD-45F3-88F6-F3E650EA88CE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{05F8CFE3-04FA-45D3-8E81-A642FB9E1ABA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{05F8CFE3-04FA-45D3-8E81-A642FB9E1ABA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05F8CFE3-04FA-45D3-8E81-A642FB9E1ABA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -44,12 +42,17 @@ Global
 		{60B7DB52-0D33-44BA-B10C-7C2332E276C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60B7DB52-0D33-44BA-B10C-7C2332E276C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60B7DB52-0D33-44BA-B10C-7C2332E276C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25CB7EF0-5667-4A3A-B419-CE05DE7184FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25CB7EF0-5667-4A3A-B419-CE05DE7184FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25CB7EF0-5667-4A3A-B419-CE05DE7184FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25CB7EF0-5667-4A3A-B419-CE05DE7184FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{05F8CFE3-04FA-45D3-8E81-A642FB9E1ABA} = {DAF732BA-C7A6-4410-9376-0511B8EB849A}
+		{25CB7EF0-5667-4A3A-B419-CE05DE7184FD} = {784B13AF-A321-4540-9B08-2709857B197F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {346EDF32-0094-4FB8-8C43-29CE4792F3ED}
