@@ -1,3 +1,0 @@
-[submodule "NLog.Targets.Gelf"]
-	path = NLog.Targets.Gelf
-	url = https://github.com/ARSFI/NLog.Targets.Gelf
