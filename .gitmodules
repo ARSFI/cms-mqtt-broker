@@ -1,6 +1,3 @@
-[submodule "cms-database"]
-	path = cms-database
-	url = git@github.com:ARSFI/cms-database.git
 [submodule "NLog.Targets.Gelf"]
 	path = NLog.Targets.Gelf
 	url = https://github.com/ARSFI/NLog.Targets.Gelf
