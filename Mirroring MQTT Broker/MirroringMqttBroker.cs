@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
@@ -118,14 +119,9 @@ namespace mirroring.mqtt.broker
             Log.Debug($"Waiting {BrokerConfiguration.ConnectionDelayInMilliseconds} milliseconds before connecting to remote brokers");
             await Task.Delay(BrokerConfiguration.ConnectionDelayInMilliseconds);
 
-            // Connect to clients
-            int index = 0;
-            foreach (var clientConfig in _serviceConfiguration.RemoteMqttBrokers)
-            {
-                Log.Info($"Connecting to {clientConfig.Host} port {clientConfig.Port}");
-                await _mqttClients[index].ConnectAsync(_mqttClientOptions[index]);
-                index++;
-            }
+            // Connect to clients (all at once - in parallel)
+            // Disconnect logic (above) will handle failures and retries
+            Task.WaitAll(_mqttClients.Select(p => p.ConnectAsync(_mqttClientOptions[_mqttClients.IndexOf(p)])).Cast<Task>().ToArray());
 
             while (!stoppingToken.IsCancellationRequested)
             {
@@ -133,7 +129,7 @@ namespace mirroring.mqtt.broker
             }
 
             // Disconnect from clients
-            index = 0;
+            int index = 0;
             foreach (var unused in _serviceConfiguration.RemoteMqttBrokers)
             {
                 _mqttClients[index].DisconnectedHandler = null;
