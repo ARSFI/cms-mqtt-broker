@@ -3,14 +3,14 @@
 Using PowerShell 7.x
 
 Install with:
-New-Service -Name "CMS MQTT Broker" -Description "Mirroring MQTT Broker" -StartupType "Manual" -BinaryPathName "[path-to]\CMS MQTT Broker Service.exe"
+New-Service -Name "CMSMQTTBroker" -Description "Mirroring MQTT Broker" -StartupType "Manual" -BinaryPathName "[path-to]\CMS MQTT Broker Service.exe"
 
-//New-Service -Name "CMS MQTT Broker" -Description "Mirroring MQTT Broker" -StartupType "Manual" -BinaryPathName "D:\Projects\cms-mqtt-broker\CMS MQTT Broker Service\bin\Release\net5.0\CMS MQTT Broker Service.exe"
+//New-Service -Name "CMSMQTTBroker" -Description "Mirroring MQTT Broker" -StartupType "Manual" -BinaryPathName "D:\Projects\cms-mqtt-broker\CMS MQTT Broker Service\bin\Release\net5.0\CMS MQTT Broker Service.exe"
 
 Uninstall with:
-Remove-Service -Name "CMS MQTT Broker"
+Remove-Service -Name "CMSMQTTBroker"
 
 Start service using service manager or:
-Start-Service -Name "CMS MQTT Broker"
+Start-Service -Name "CMSMQTTBroker"
 
 To monitor the service in real-time use Log2Console w/ udp receiver configured to listen on port 7071
