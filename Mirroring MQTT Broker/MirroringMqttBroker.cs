@@ -83,8 +83,6 @@ namespace mirroring.mqtt.broker
             _mqttClients = new List<IMqttClient>();
             _mqttClientOptions = new List<IMqttClientOptions>();
 
-            //BUG: Won't continue past a failing remote broker
-
             foreach (var clientConfig in _serviceConfiguration.RemoteMqttBrokers)
             {
                 var mqttClient = mqttFactory.CreateMqttClient();
@@ -123,6 +121,8 @@ namespace mirroring.mqtt.broker
             // Disconnect logic (above) will handle failures and retries
             Task.WaitAll(_mqttClients.Select(p => p.ConnectAsync(_mqttClientOptions[_mqttClients.IndexOf(p)])).Cast<Task>().ToArray());
 
+
+            // Wait until stop requested
             while (!stoppingToken.IsCancellationRequested)
             {
                 await Task.Delay(BrokerConfiguration.StoppingDelayInMilliseconds, stoppingToken);
