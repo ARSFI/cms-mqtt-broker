@@ -34,8 +34,6 @@ namespace mirroring.mqtt.broker
             // Create MQTT factory.
             var mqttFactory = new MqttFactory();
 
-            //TODO: Need to implement websocket listener
-
             // Create options
             var optionsBuilder = new MqttServerOptionsBuilder()
                 .WithDefaultEndpointPort(_serviceConfiguration.LocalMqttBrokerTcpPort)

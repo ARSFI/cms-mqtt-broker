@@ -18,6 +18,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".tests", ".tests", "{DAF732
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NLog.Targets.Gelf", "NLog.Targets.Gelf\NLog.Targets.Gelf.csproj", "{56CADC1F-EF83-4487-9751-69B5259678DF}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMS MQTT Service", "CMS MQTT Service\CMS MQTT Service.csproj", "{DBD78885-901B-45BC-9578-F476F8B93893}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".asp.net.version", ".asp.net.version", "{3CF1A53C-723A-44F7-A7B0-07D3AF1C0899}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,12 +48,17 @@ Global
 		{56CADC1F-EF83-4487-9751-69B5259678DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56CADC1F-EF83-4487-9751-69B5259678DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56CADC1F-EF83-4487-9751-69B5259678DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBD78885-901B-45BC-9578-F476F8B93893}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBD78885-901B-45BC-9578-F476F8B93893}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBD78885-901B-45BC-9578-F476F8B93893}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBD78885-901B-45BC-9578-F476F8B93893}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{05F8CFE3-04FA-45D3-8E81-A642FB9E1ABA} = {DAF732BA-C7A6-4410-9376-0511B8EB849A}
+		{DBD78885-901B-45BC-9578-F476F8B93893} = {3CF1A53C-723A-44F7-A7B0-07D3AF1C0899}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {346EDF32-0094-4FB8-8C43-29CE4792F3ED}
