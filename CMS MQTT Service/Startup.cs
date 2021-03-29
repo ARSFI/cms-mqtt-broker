@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -7,6 +8,8 @@ using mirroring.mqtt.broker;
 using mirroring.mqtt.broker.config;
 using MQTTnet.AspNetCore;
 using MQTTnet.AspNetCore.Extensions;
+using MQTTnet.Server;
+using NLog.Fluent;
 
 namespace winlink.cms.mqtt
 {
@@ -37,7 +40,24 @@ namespace winlink.cms.mqtt
 
             app.UseMqttServer(server =>
             {
-                // Todo: Do something with the server
+                server.StartedHandler = new MqttServerStartedHandlerDelegate(async args =>
+                {
+                    Log.Debug($"Waiting {BrokerConfiguration.ConnectionDelayInMilliseconds} milliseconds before connecting to remote brokers");
+                    await Task.Delay(BrokerConfiguration.ConnectionDelayInMilliseconds);
+
+                    // Connect to clients (all at once - in parallel)
+                    // Disconnect logic (above) will handle failures and retries
+                    //Task.WaitAll(_mqttClients.Select(p => p.ConnectAsync(_mqttClientOptions[_mqttClients.IndexOf(p)])).Cast<Task>().ToArray());
+                });
+
+                server.StoppedHandler = new MqttServerStoppedHandlerDelegate(async args =>
+                {
+                    /*foreach (var unused in _serviceConfiguration.RemoteMqttBrokers)
+                    {
+                        await _mqttClients[index].DisconnectAsync();
+                        index++;
+                    }*/
+                });
             });
         }
     }
