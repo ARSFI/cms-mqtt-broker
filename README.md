@@ -11,7 +11,9 @@ A multi-server cluster of MQTT brokers to enable sharing information between Win
 * Configurable relay destination(s)
 * ~~Configuration stored in MySQL database (no local config files)~~
   * ~~See cms-database repo~~
-
+* Capable of filtering messages forwarded to other MQTT brokers
+  * Use subscribe format as part remote broker configuration (multiples)
+  
 # Notes
 * Possibly use MQTTNet library
 * Existing CMS Service Manager program will control using System.ServiceProcess 
