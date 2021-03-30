@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFrameworks>net5.0</TargetFrameworks>
@@ -8,7 +8,7 @@
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <Company />
     <Product>MQTTnet</Product>
-    <Description>Standalone MQTT server with Python scripting backend.</Description>
+    <Description>Standalone MQTT server.</Description>
     <Authors>The authors of MQTTnet.Server.</Authors>
     <PackageId />
     <SignAssembly>false</SignAssembly>
@@ -57,18 +57,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="README.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Web\authorization_handler.py">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Web\wwwroot\Hello.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Web\wwwroot\mqtt_Test.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Web\wwwroot\pahoJS_Test.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

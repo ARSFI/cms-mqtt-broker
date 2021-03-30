@@ -13,6 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mirroring MQTT Broker Confi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".tests", ".tests", "{DAF732BA-C7A6-4410-9376-0511B8EB849A}"
 	ProjectSection(SolutionItems) = preProject
+		MQTTnet.Server\Web\pahoJS_Test.html = MQTTnet.Server\Web\pahoJS_Test.html
 		Tests\WebSocketTest.html = Tests\WebSocketTest.html
 	EndProjectSection
 EndProject
