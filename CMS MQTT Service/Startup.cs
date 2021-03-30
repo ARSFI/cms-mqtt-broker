@@ -4,18 +4,24 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using mirroring.mqtt.broker;
 using mirroring.mqtt.broker.config;
 using MQTTnet.AspNetCore;
 using MQTTnet.AspNetCore.Extensions;
 using MQTTnet.Server;
-using NLog.Fluent;
+using NLog;
 
 namespace winlink.cms.mqtt
 {
     public class Startup
     {
-        public IConfigurationRoot Configuration { get; set; }
+        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+
+        public IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration config)
+        {
+            Configuration = config;
+        }
 
         public void ConfigureServices(IServiceCollection services)
         {
