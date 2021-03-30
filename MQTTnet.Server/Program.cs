@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using MQTTnet.Server.Web;
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection;
+
 
 namespace MQTTnet.Server
 {
@@ -15,12 +13,12 @@ namespace MQTTnet.Server
             try
             {
                 Host.CreateDefaultBuilder(args)
+                    .UseWindowsService()
                     .ConfigureWebHostDefaults(webBuilder =>
                     {
                         webBuilder.ConfigureKestrel(serverOptions =>
                         {
                         })
-                        .UseWebRoot(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Web", "wwwroot"))
                         .UseStartup<Startup>();
                     }).Build().Run();
 
@@ -32,6 +30,5 @@ namespace MQTTnet.Server
                 return -1;
             }
         }
-
     }
 }
