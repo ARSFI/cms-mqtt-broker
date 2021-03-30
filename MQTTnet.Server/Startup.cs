@@ -1,6 +1,5 @@
 using System;
 using System.Net;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +10,7 @@ using MQTTnet.Server.Logging;
 using MQTTnet.Server.Mqtt;
 using Newtonsoft.Json.Converters;
 
-namespace MQTTnet.Server.Web
+namespace MQTTnet.Server
 {
     public class Startup
     {
@@ -92,10 +91,6 @@ namespace MQTTnet.Server.Web
             var mqttSettings = new MqttSettingsModel();
             Configuration.Bind("MQTT", mqttSettings);
             services.AddSingleton(mqttSettings);
-
-            var scriptingSettings = new ScriptingSettingsModel();
-            Configuration.Bind("Scripting", scriptingSettings);
-            services.AddSingleton(scriptingSettings);
         }
 
         static void ConfigureWebSocketEndpoint(

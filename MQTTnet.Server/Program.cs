@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using MQTTnet.Server.Web;
 
 
 namespace MQTTnet.Server
