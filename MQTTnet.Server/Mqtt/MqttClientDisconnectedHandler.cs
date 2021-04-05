@@ -18,6 +18,8 @@ namespace MQTTnet.Server.Mqtt
             try
             {
                 //TODO:
+
+                _logger.LogInformation($"Client disconnected: {eventArgs.ClientId}, Disconnect Type: {eventArgs.DisconnectType}");
             }
             catch (Exception exception)
             {

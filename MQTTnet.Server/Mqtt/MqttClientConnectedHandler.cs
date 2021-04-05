@@ -18,6 +18,8 @@ namespace MQTTnet.Server.Mqtt
             try
             {
                 //TODO:
+
+                _logger.LogInformation($"Client connected: {eventArgs.ClientId}");
             }
             catch (Exception exception)
             {

@@ -21,6 +21,25 @@ namespace MQTTnet.Server.Mqtt
                 context.SessionItems.TryGetValue(MqttServerConnectionValidator.WrappedSessionItemsKey, out var sessionItems);
 
                 //TODO:
+
+                //arg.AcceptPublish = true;
+
+                //// Avoid loops by not mirroring messages from other servers.
+                //if (arg.ClientId != _serviceConfiguration.ClientId)
+                //{
+                //    foreach (var client in _mqttClients)
+                //    {
+                //        if (client.IsConnected)
+                //        {
+                //            client.PublishAsync(arg.ApplicationMessage);
+                //        }
+                //    }
+                //}
+
+                ////TODO: Temporary
+                //var payload = System.Text.Encoding.UTF8.GetString(arg.ApplicationMessage.Payload);
+                //Log.Debug($"Received message : {arg.ApplicationMessage.Topic} / {payload}");
+
             }
             catch (Exception exception)
             {

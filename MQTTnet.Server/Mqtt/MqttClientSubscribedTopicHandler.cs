@@ -18,6 +18,8 @@ namespace MQTTnet.Server.Mqtt
             try
             {
                 //TODO:
+
+                _logger.LogInformation($"{eventArgs.ClientId} subscribed to: {eventArgs.TopicFilter.Topic}");
             }
             catch (Exception exception)
             {

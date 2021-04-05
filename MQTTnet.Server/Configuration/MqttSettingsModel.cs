@@ -1,10 +1,15 @@
-﻿namespace MQTTnet.Server.Configuration
+﻿using System.Collections.Generic;
+
+namespace MQTTnet.Server.Configuration
 {
     /// <summary>
     /// MQTT settings Model
     /// </summary>
     public class MqttSettingsModel
     {
+        public const int ConnectionDelayInMilliseconds = 5000;
+        public const int StoppingDelayInMilliseconds = 2000;
+
         /// <summary>
         /// Set default connection timeout in seconds
         /// </summary>
@@ -39,5 +44,30 @@
         /// Set limit for max pending messages per client
         /// </summary>
         public int MaxPendingMessagesPerClient { get; set; } = 250;
+
+        /// <summary>
+        /// Flag to control use of client authentication 
+        /// </summary>
+        private bool RequireClientAuthentication { get; set; } = false;
+        
+        /// <summary>
+        /// Unique ID for this MQTT Broker instance
+        /// </summary>
+        public string BrokerClientId { get; set; }
+
+        /// <summary>
+        /// The username to use to connect to this broker 
+        /// </summary>
+        private string BrokerUsername { get; set; }
+
+        /// <summary>
+        /// The password to use to connect to this broker
+        /// </summary>
+        private string BrokerPassword { get; set; }
+
+        /// <summary>
+        /// The other broker(s) IP address/hostname, etc.
+        /// </summary>
+        public List<RemoteBrokerConfiguration> RemoteBrokers { get; set; }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using NLog.Web;
 using Microsoft.Extensions.Logging;
+using NLog.Web;
 
 namespace MQTTnet.Server
 {
@@ -26,7 +26,8 @@ namespace MQTTnet.Server
                             })
                             .UseNLog()
                             .UseStartup<Startup>();
-                    }).Build().Run();
+                    })
+                    .Build().Run();
 
                 return 0;
             }

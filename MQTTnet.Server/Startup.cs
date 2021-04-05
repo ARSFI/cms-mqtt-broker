@@ -5,9 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MQTTnet.AspNetCore;
 using MQTTnet.Server.Configuration;
-using MQTTnet.Server.Logging;
 using MQTTnet.Server.Mqtt;
-using NLog.Web;
 
 namespace MQTTnet.Server
 {
@@ -50,8 +48,6 @@ namespace MQTTnet.Server
 
             ReadMqttSettings(services);
 
-            services.AddSingleton<MqttNetLoggerWrapper>();
-            services.AddSingleton<CustomMqttFactory>();
             services.AddSingleton<MqttServerService>();
             services.AddSingleton<MqttClientConnectedHandler>();
             services.AddSingleton<MqttClientDisconnectedHandler>();

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using MQTTnet.Adapter;
 using MQTTnet.AspNetCore;
+using MQTTnet.Client;
+using MQTTnet.Client.Options;
 using MQTTnet.Implementations;
 using MQTTnet.Server.Configuration;
 
@@ -28,9 +30,12 @@ namespace MQTTnet.Server.Mqtt
         readonly MqttUnsubscriptionInterceptor _mqttUnsubscriptionInterceptor;
         readonly MqttWebSocketServerAdapter _webSocketServerAdapter;
 
+        private readonly MqttFactory _mqttFactory;
+        private List<IMqttClient> _mqttClients;
+        private List<IMqttClientOptions> _mqttClientOptions;
+
         public MqttServerService(
             MqttSettingsModel mqttSettings,
-            CustomMqttFactory mqttFactory,
             MqttClientConnectedHandler mqttClientConnectedHandler,
             MqttClientDisconnectedHandler mqttClientDisconnectedHandler,
             MqttClientSubscribedTopicHandler mqttClientSubscribedTopicHandler,
@@ -52,18 +57,18 @@ namespace MQTTnet.Server.Mqtt
             _mqttApplicationMessageInterceptor = mqttApplicationMessageInterceptor ?? throw new ArgumentNullException(nameof(mqttApplicationMessageInterceptor));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-            _webSocketServerAdapter = new MqttWebSocketServerAdapter(mqttFactory.Logger);
-
+            _mqttFactory = new MqttFactory();
+            _webSocketServerAdapter = new MqttWebSocketServerAdapter(_mqttFactory.DefaultLogger);
             var adapters = new List<IMqttServerAdapter>
             {
-                new MqttTcpServerAdapter(mqttFactory.Logger)
+                new MqttTcpServerAdapter(_mqttFactory.DefaultLogger)
                 {
-                    TreatSocketOpeningErrorAsWarning = true // Opening other ports than for HTTP is not allows in Azure App Services.
+                    TreatSocketOpeningErrorAsWarning = true 
                 },
                 _webSocketServerAdapter
             };
 
-            _mqttServer = mqttFactory.CreateMqttServer(adapters);
+            _mqttServer = _mqttFactory.CreateMqttServer(adapters);
         }
 
         public void Configure()
@@ -74,8 +79,15 @@ namespace MQTTnet.Server.Mqtt
             _mqttServer.ClientUnsubscribedTopicHandler = _mqttClientUnsubscribedTopicHandler;
 
             _mqttServer.StartAsync(CreateMqttServerOptions()).GetAwaiter().GetResult();
-
             _logger.LogInformation("MQTT server started.");
+
+            // Connect to remote brokers (clients of this broker)
+            _mqttClients = new List<IMqttClient>();
+            _mqttClientOptions = new List<IMqttClientOptions>();
+
+            //TODO: Not sure how to implement code from mirroring broker
+            //!!!
+
         }
 
         public Task RunWebSocketConnectionAsync(WebSocket webSocket, HttpContext httpContext)
@@ -91,7 +103,8 @@ namespace MQTTnet.Server.Mqtt
                 .WithConnectionValidator(_mqttConnectionValidator)
                 .WithApplicationMessageInterceptor(_mqttApplicationMessageInterceptor)
                 .WithSubscriptionInterceptor(_mqttSubscriptionInterceptor)
-                .WithUnsubscriptionInterceptor(_mqttUnsubscriptionInterceptor);
+                .WithUnsubscriptionInterceptor(_mqttUnsubscriptionInterceptor)
+                .WithClientId(_settings.BrokerClientId);
 
             // Configure unencrypted connections
             if (_settings.TcpEndPoint.Enabled)

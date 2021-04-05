@@ -20,12 +20,24 @@ namespace MQTTnet.Server.Mqtt
         {
             try
             {
-                //TODO:
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError(exception, "Error while validating client connection.");
+                //TODO: If enabled in settings, verify username and password
 
+                //if (!_serviceConfiguration.RequireClientAuthentication || connection.Username == _serviceConfiguration.LocalMqttBrokerUsername &&
+                //    connection.Password == _serviceConfiguration.LocalMqttBrokerPassword)
+                //{
+                //    connection.ReasonCode = MqttConnectReasonCode.Success;
+                //    Log.Info($"New connection - ClientId: {connection.ClientId}");
+                //}
+                //else
+                //{
+                //    connection.ReasonCode = MqttConnectReasonCode.BadUserNameOrPassword;
+                //    Log.Info($"Invalid connection attempt - ClientId: {connection.ClientId}, Username: {connection.Username}");
+                //}
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while validating client connection.");
                 context.ReasonCode = MqttConnectReasonCode.UnspecifiedError;
             }
 

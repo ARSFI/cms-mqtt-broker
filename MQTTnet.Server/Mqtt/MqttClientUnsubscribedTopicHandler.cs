@@ -18,6 +18,8 @@ namespace MQTTnet.Server.Mqtt
             try
             {
                 //TODO:
+
+                _logger.LogInformation($"{eventArgs.ClientId} unsubscribed from: {eventArgs.TopicFilter}");
             }
             catch (Exception exception)
             {
