@@ -1,7 +1,8 @@
 ﻿using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-
+using NLog.Web;
+using Microsoft.Extensions.Logging;
 
 namespace MQTTnet.Server
 {
@@ -16,9 +17,15 @@ namespace MQTTnet.Server
                     .ConfigureWebHostDefaults(webBuilder =>
                     {
                         webBuilder.ConfigureKestrel(serverOptions =>
-                        {
-                        })
-                        .UseStartup<Startup>();
+                            {
+                            })
+                            .ConfigureLogging(logging =>
+                            {
+                                logging.ClearProviders();
+                                logging.SetMinimumLevel(LogLevel.Trace);
+                            })
+                            .UseNLog()
+                            .UseStartup<Startup>();
                     }).Build().Run();
 
                 return 0;

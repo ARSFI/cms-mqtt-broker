@@ -7,20 +7,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using MQTTnet.Adapter;
 using MQTTnet.AspNetCore;
-using MQTTnet.Client.Publishing;
 using MQTTnet.Implementations;
 using MQTTnet.Server.Configuration;
-using MQTTnet.Server.Status;
 
 namespace MQTTnet.Server.Mqtt
 {
     public class MqttServerService
     {
-        readonly ILogger<MqttServerService> _logger;
+        private readonly ILogger<MqttServerService> _logger;
 
         readonly MqttSettingsModel _settings;
         readonly MqttApplicationMessageInterceptor _mqttApplicationMessageInterceptor;
-        readonly MqttServerStorage _mqttServerStorage;
         readonly MqttClientConnectedHandler _mqttClientConnectedHandler;
         readonly MqttClientDisconnectedHandler _mqttClientDisconnectedHandler;
         readonly MqttClientSubscribedTopicHandler _mqttClientSubscribedTopicHandler;
@@ -42,7 +39,6 @@ namespace MQTTnet.Server.Mqtt
             MqttSubscriptionInterceptor mqttSubscriptionInterceptor,
             MqttUnsubscriptionInterceptor mqttUnsubscriptionInterceptor,
             MqttApplicationMessageInterceptor mqttApplicationMessageInterceptor,
-            MqttServerStorage mqttServerStorage,
             ILogger<MqttServerService> logger)
         {
             _settings = mqttSettings ?? throw new ArgumentNullException(nameof(mqttSettings));
@@ -54,7 +50,6 @@ namespace MQTTnet.Server.Mqtt
             _mqttSubscriptionInterceptor = mqttSubscriptionInterceptor ?? throw new ArgumentNullException(nameof(mqttSubscriptionInterceptor));
             _mqttUnsubscriptionInterceptor = mqttUnsubscriptionInterceptor ?? throw new ArgumentNullException(nameof(mqttUnsubscriptionInterceptor));
             _mqttApplicationMessageInterceptor = mqttApplicationMessageInterceptor ?? throw new ArgumentNullException(nameof(mqttApplicationMessageInterceptor));
-            _mqttServerStorage = mqttServerStorage ?? throw new ArgumentNullException(nameof(mqttServerStorage));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             _webSocketServerAdapter = new MqttWebSocketServerAdapter(mqttFactory.Logger);
@@ -73,8 +68,6 @@ namespace MQTTnet.Server.Mqtt
 
         public void Configure()
         {
-            _mqttServerStorage.Configure();
-
             _mqttServer.ClientConnectedHandler = _mqttClientConnectedHandler;
             _mqttServer.ClientDisconnectedHandler = _mqttClientDisconnectedHandler;
             _mqttServer.ClientSubscribedTopicHandler = _mqttClientSubscribedTopicHandler;
@@ -90,33 +83,6 @@ namespace MQTTnet.Server.Mqtt
             return _webSocketServerAdapter.RunWebSocketConnectionAsync(webSocket, httpContext);
         }
 
-        public Task<IList<IMqttClientStatus>> GetClientStatusAsync()
-        {
-            return _mqttServer.GetClientStatusAsync();
-        }
-
-        public Task<IList<IMqttSessionStatus>> GetSessionStatusAsync()
-        {
-            return _mqttServer.GetSessionStatusAsync();
-        }
-
-        public Task ClearRetainedApplicationMessagesAsync()
-        {
-            return _mqttServer.ClearRetainedApplicationMessagesAsync();
-        }
-
-        public Task<IList<MqttApplicationMessage>> GetRetainedApplicationMessagesAsync()
-        {
-            return _mqttServer.GetRetainedApplicationMessagesAsync();
-        }
-
-        public Task<MqttClientPublishResult> PublishAsync(MqttApplicationMessage applicationMessage)
-        {
-            if (applicationMessage == null) throw new ArgumentNullException(nameof(applicationMessage));
-
-            return _mqttServer.PublishAsync(applicationMessage);
-        }
-
         IMqttServerOptions CreateMqttServerOptions()
         {
             var options = new MqttServerOptionsBuilder()
@@ -125,8 +91,7 @@ namespace MQTTnet.Server.Mqtt
                 .WithConnectionValidator(_mqttConnectionValidator)
                 .WithApplicationMessageInterceptor(_mqttApplicationMessageInterceptor)
                 .WithSubscriptionInterceptor(_mqttSubscriptionInterceptor)
-                .WithUnsubscriptionInterceptor(_mqttUnsubscriptionInterceptor)
-                .WithStorage(_mqttServerStorage);
+                .WithUnsubscriptionInterceptor(_mqttUnsubscriptionInterceptor);
 
             // Configure unencrypted connections
             if (_settings.TcpEndPoint.Enabled)
@@ -156,15 +121,9 @@ namespace MQTTnet.Server.Mqtt
             // Configure encrypted connections
             if (_settings.EncryptedTcpEndPoint.Enabled)
             {
-#if NETCOREAPP3_1 || NET5_0
                 options
                     .WithEncryptedEndpoint()
                     .WithEncryptionSslProtocol(SslProtocols.Tls13);
-#else
-                options
-                    .WithEncryptedEndpoint()
-                    .WithEncryptionSslProtocol(SslProtocols.Tls12);
-#endif
 
                 if (!string.IsNullOrEmpty(_settings.EncryptedTcpEndPoint?.Certificate?.Path))
                 {

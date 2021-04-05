@@ -1,14 +1,13 @@
 using System;
 using System.Net;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MQTTnet.AspNetCore;
 using MQTTnet.Server.Configuration;
 using MQTTnet.Server.Logging;
 using MQTTnet.Server.Mqtt;
-using Newtonsoft.Json.Converters;
+using NLog.Web;
 
 namespace MQTTnet.Server
 {
@@ -17,8 +16,7 @@ namespace MQTTnet.Server
         public Startup(IConfiguration configuration)
         {
             var builder = new ConfigurationBuilder()
-                .AddJsonFile("appSettings.json")
-                .AddEnvironmentVariables();
+                .AddJsonFile("appSettings.json");
 
             Configuration = builder.Build();
         }
@@ -34,20 +32,13 @@ namespace MQTTnet.Server
             application.UseStaticFiles();
 
             application.UseHsts();
-            application.UseRouting();
             application.UseCors(x => x
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
                 .AllowAnyHeader());
 
             application.UseAuthentication();
-            application.UseAuthorization();
      
-            application.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-
             ConfigureWebSocketEndpoint(application, mqttServerService, mqttSettings);
 
             mqttServerService.Configure();
@@ -57,22 +48,11 @@ namespace MQTTnet.Server
         {
             services.AddCors();
 
-            services.AddControllers();
-
-            services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
-                .AddNewtonsoftJson(o =>
-                {
-                    o.SerializerSettings.Converters.Add(new StringEnumConverter());
-                });
-
             ReadMqttSettings(services);
 
             services.AddSingleton<MqttNetLoggerWrapper>();
             services.AddSingleton<CustomMqttFactory>();
             services.AddSingleton<MqttServerService>();
-            services.AddSingleton<MqttServerStorage>();
-
             services.AddSingleton<MqttClientConnectedHandler>();
             services.AddSingleton<MqttClientDisconnectedHandler>();
             services.AddSingleton<MqttClientSubscribedTopicHandler>();
@@ -126,11 +106,8 @@ namespace MQTTnet.Server
                         {
                             subProtocol = MqttSubProtocolSelector.SelectSubProtocol(requestedSubProtocolValues);
                         }
-
-                        using (var webSocket = await context.WebSockets.AcceptWebSocketAsync(subProtocol).ConfigureAwait(false))
-                        {
-                            await mqttServerService.RunWebSocketConnectionAsync(webSocket, context).ConfigureAwait(false);
-                        }
+                        using var webSocket = await context.WebSockets.AcceptWebSocketAsync(subProtocol).ConfigureAwait(false);
+                        await mqttServerService.RunWebSocketConnectionAsync(webSocket, context).ConfigureAwait(false);
                     }
                     else
                     {

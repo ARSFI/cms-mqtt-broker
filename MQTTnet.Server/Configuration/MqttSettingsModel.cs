@@ -39,15 +39,5 @@
         /// Set limit for max pending messages per client
         /// </summary>
         public int MaxPendingMessagesPerClient { get; set; } = 250;
-
-        /// <summary>
-        /// The settings for retained messages.
-        /// </summary>
-        public RetainedApplicationMessagesModel RetainedApplicationMessages { get; set; } = new RetainedApplicationMessagesModel();
-
-        /// <summary>
-        /// Enables or disables the MQTTnet internal logging.
-        /// </summary>
-        public bool EnableDebugLogging { get; set; } = false;
     }
 }
