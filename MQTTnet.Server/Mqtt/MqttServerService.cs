@@ -74,6 +74,11 @@ namespace MQTTnet.Server.Mqtt
             _mqttServer = mqttFactory.CreateMqttServer(adapters);
         }
 
+        // We return IEnumerable here so callers don't inadvertently modify the collection.
+        public IEnumerable<IMqttClient> Clients {  get { return _mqttClients; } }
+        
+        public MqttSettingsModel Settings { get { return _settings; } }
+
         public void Configure()
         {
             _mqttServer.ClientConnectedHandler = _mqttClientConnectedHandler;
@@ -116,10 +121,12 @@ namespace MQTTnet.Server.Mqtt
                 });
             }
 
-            //TODO: Not sure how to implement code from mirroring broker
-            //!!!
+            Log.Debug($"Waiting {MqttSettingsModel.ConnectionDelayInMilliseconds} milliseconds before connecting to remote brokers");
+            Task.Delay(MqttSettingsModel.ConnectionDelayInMilliseconds);
 
-
+            // Connect to clients (all at once - in parallel)
+            // Disconnect logic (above) will handle failures and retries
+            Task.WaitAll(_mqttClients.Select(p => p.ConnectAsync(_mqttClientOptions[_mqttClients.IndexOf(p)])).Cast<Task>().ToArray());
         }
 
         public Task RunWebSocketConnectionAsync(WebSocket webSocket, HttpContext httpContext)

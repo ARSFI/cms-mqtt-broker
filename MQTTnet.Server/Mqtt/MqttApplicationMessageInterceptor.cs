@@ -1,16 +1,19 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using MQTTnet.Client;
 
 namespace MQTTnet.Server.Mqtt
 {
     public class MqttApplicationMessageInterceptor : IMqttServerApplicationMessageInterceptor
     {
         private readonly ILogger _logger;
+        private readonly MqttServerService _service;
 
-        public MqttApplicationMessageInterceptor(ILogger<MqttApplicationMessageInterceptor> logger)
+        public MqttApplicationMessageInterceptor(MqttServerService service, ILogger<MqttApplicationMessageInterceptor> logger)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _service = service ?? throw new ArgumentNullException(nameof(service));
         }
 
         public Task InterceptApplicationMessagePublishAsync(MqttApplicationMessageInterceptorContext context)
@@ -20,21 +23,19 @@ namespace MQTTnet.Server.Mqtt
                 // This might be not set when a message was published by the server instead of a client.
                 context.SessionItems.TryGetValue(MqttServerConnectionValidator.WrappedSessionItemsKey, out var sessionItems);
 
-                //TODO:
+                context.AcceptPublish = true;
 
-                //arg.AcceptPublish = true;
-
-                //// Avoid loops by not mirroring messages from other servers.
-                //if (arg.ClientId != _serviceConfiguration.ClientId)
-                //{
-                //    foreach (var client in _mqttClients)
-                //    {
-                //        if (client.IsConnected)
-                //        {
-                //            client.PublishAsync(arg.ApplicationMessage);
-                //        }
-                //    }
-                //}
+                // Avoid loops by not mirroring messages from other servers.
+                if (context.ClientId != _service.Settings.BrokerClientId)
+                {
+                    foreach (var client in _service.Clients)
+                    {
+                        if (client.IsConnected)
+                        {
+                            client.PublishAsync(context.ApplicationMessage);
+                        }
+                    }
+                }
 
                 ////TODO: Temporary
                 //var payload = System.Text.Encoding.UTF8.GetString(arg.ApplicationMessage.Payload);

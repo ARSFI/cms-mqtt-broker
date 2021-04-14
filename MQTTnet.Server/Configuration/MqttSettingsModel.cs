@@ -48,7 +48,7 @@ namespace MQTTnet.Server.Configuration
         /// <summary>
         /// Flag to control use of client authentication 
         /// </summary>
-        private bool RequireClientAuthentication { get; set; } = false;
+        public bool RequireClientAuthentication { get; set; } = false;
         
         /// <summary>
         /// Unique ID for this MQTT Broker instance
@@ -58,12 +58,12 @@ namespace MQTTnet.Server.Configuration
         /// <summary>
         /// The username to use to connect to this broker 
         /// </summary>
-        private string BrokerUsername { get; set; }
+        public string BrokerUsername { get; set; }
 
         /// <summary>
         /// The password to use to connect to this broker
         /// </summary>
-        private string BrokerPassword { get; set; }
+        public string BrokerPassword { get; set; }
 
         /// <summary>
         /// The other broker(s) IP address/hostname, etc.
