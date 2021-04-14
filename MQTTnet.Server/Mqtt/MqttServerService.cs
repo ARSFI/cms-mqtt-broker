@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.WebSockets;
 using System.Security.Authentication;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MQTTnet.Adapter;
 using MQTTnet.AspNetCore;
@@ -11,10 +14,11 @@ using MQTTnet.Client;
 using MQTTnet.Client.Options;
 using MQTTnet.Implementations;
 using MQTTnet.Server.Configuration;
+using NLog.Fluent;
 
 namespace MQTTnet.Server.Mqtt
 {
-    public class MqttServerService
+    public class MqttServerService 
     {
         private readonly ILogger<MqttServerService> _logger;
 
@@ -30,7 +34,6 @@ namespace MQTTnet.Server.Mqtt
         readonly MqttUnsubscriptionInterceptor _mqttUnsubscriptionInterceptor;
         readonly MqttWebSocketServerAdapter _webSocketServerAdapter;
 
-        private readonly MqttFactory _mqttFactory;
         private List<IMqttClient> _mqttClients;
         private List<IMqttClientOptions> _mqttClientOptions;
 
@@ -57,18 +60,18 @@ namespace MQTTnet.Server.Mqtt
             _mqttApplicationMessageInterceptor = mqttApplicationMessageInterceptor ?? throw new ArgumentNullException(nameof(mqttApplicationMessageInterceptor));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-            _mqttFactory = new MqttFactory();
-            _webSocketServerAdapter = new MqttWebSocketServerAdapter(_mqttFactory.DefaultLogger);
+            var mqttFactory = new MqttFactory();
+            _webSocketServerAdapter = new MqttWebSocketServerAdapter(mqttFactory.DefaultLogger);
             var adapters = new List<IMqttServerAdapter>
             {
-                new MqttTcpServerAdapter(_mqttFactory.DefaultLogger)
+                new MqttTcpServerAdapter(mqttFactory.DefaultLogger)
                 {
-                    TreatSocketOpeningErrorAsWarning = true 
+                    TreatSocketOpeningErrorAsWarning = true
                 },
                 _webSocketServerAdapter
             };
 
-            _mqttServer = _mqttFactory.CreateMqttServer(adapters);
+            _mqttServer = mqttFactory.CreateMqttServer(adapters);
         }
 
         public void Configure()
@@ -81,12 +84,41 @@ namespace MQTTnet.Server.Mqtt
             _mqttServer.StartAsync(CreateMqttServerOptions()).GetAwaiter().GetResult();
             _logger.LogInformation("MQTT server started.");
 
-            // Connect to remote brokers (clients of this broker)
+            // Connect to remote brokers 
             _mqttClients = new List<IMqttClient>();
             _mqttClientOptions = new List<IMqttClientOptions>();
+            var mqttFactory = new MqttFactory();
+
+            foreach (var clientConfig in _settings.RemoteBrokers)
+            {
+                var mqttClient = mqttFactory.CreateMqttClient();
+                var mqttClientOptionsBuilder = new MqttClientOptionsBuilder()
+                    .WithClientId(_settings.BrokerClientId)
+                    .WithTcpServer(
+                        clientConfig.Host,
+                        clientConfig.Port);
+                _mqttClients.Add(mqttClient);
+                _mqttClientOptions.Add(mqttClientOptionsBuilder.Build());
+
+                mqttClient.UseConnectedHandler((eventArgs) =>
+                {
+                    _logger.LogInformation($"Connected to {clientConfig.Host} port {clientConfig.Port}");
+                });
+
+                // Sustain a disconnect and reconnect
+                mqttClient.UseDisconnectedHandler(async (eventArgs) =>
+                {
+                    await Task.Delay(MqttSettingsModel.ConnectionDelayInMilliseconds).ContinueWith(async (arg) =>
+                    {
+                        _logger.LogInformation($"Reconnecting to {clientConfig.Host} port {clientConfig.Port}");
+                        await mqttClient.ConnectAsync(mqttClientOptionsBuilder.Build());
+                    });
+                });
+            }
 
             //TODO: Not sure how to implement code from mirroring broker
             //!!!
+
 
         }
 
@@ -185,5 +217,6 @@ namespace MQTTnet.Server.Mqtt
 
             return options.Build();
         }
+
     }
 }

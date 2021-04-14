@@ -36,7 +36,7 @@ namespace MQTTnet.Server
                 .AllowAnyHeader());
 
             application.UseAuthentication();
-     
+
             ConfigureWebSocketEndpoint(application, mqttServerService, mqttSettings);
 
             mqttServerService.Configure();
