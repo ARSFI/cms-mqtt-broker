@@ -1,0 +1,10 @@
+
+New-Service -Name "CMSMQTTBroker" -Description "Mirroring MQTT Broker" -StartupType "Manual" -BinaryPathName "D:\Projects\cms-mqtt-broker\MQTTnet.Server\bin\Release\net5.0\publish\MQTTnet.Server.exe"
+
+Start-Service -Name "CMSMQTTBroker"
+
+Stop-Service -Name "CMSMQTTBroker"
+
+Remove-Service -Name "CMSMQTTBroker"
+
+
