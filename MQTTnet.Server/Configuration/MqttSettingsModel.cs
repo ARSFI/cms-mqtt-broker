@@ -10,6 +10,11 @@ namespace MQTTnet.Server.Configuration
         public const int ConnectionDelayInMilliseconds = 5000;
         public const int StoppingDelayInMilliseconds = 2000;
 
+        public MqttSettingsModel()
+        {
+            RemoteBrokers = new List<RemoteBrokerConfiguration>();
+        }
+
         /// <summary>
         /// Set default connection timeout in seconds
         /// </summary>

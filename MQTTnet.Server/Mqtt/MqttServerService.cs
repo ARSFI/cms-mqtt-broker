@@ -96,39 +96,43 @@ namespace MQTTnet.Server.Mqtt
             _mqttClientOptions = new List<IMqttClientOptions>();
             var mqttFactory = new MqttFactory();
 
-            foreach (var clientConfig in _settings.RemoteBrokers)
+            // Don't try to connect to other brokers if config not defined.
+            if (_settings.RemoteBrokers != null && _settings.RemoteBrokers.Count > 0)
             {
-                var mqttClient = mqttFactory.CreateMqttClient();
-                var mqttClientOptionsBuilder = new MqttClientOptionsBuilder()
-                    .WithClientId(_settings.BrokerClientId)
-                    .WithTcpServer(
-                        clientConfig.Host,
-                        clientConfig.Port);
-                _mqttClients.Add(mqttClient);
-                _mqttClientOptions.Add(mqttClientOptionsBuilder.Build());
-
-                mqttClient.UseConnectedHandler((eventArgs) =>
+                foreach (var clientConfig in _settings.RemoteBrokers)
                 {
-                    _logger.LogInformation($"Connected to {clientConfig.Host} port {clientConfig.Port}");
-                });
+                    var mqttClient = mqttFactory.CreateMqttClient();
+                    var mqttClientOptionsBuilder = new MqttClientOptionsBuilder()
+                        .WithClientId(_settings.BrokerClientId)
+                        .WithTcpServer(
+                            clientConfig.Host,
+                            clientConfig.Port);
+                    _mqttClients.Add(mqttClient);
+                    _mqttClientOptions.Add(mqttClientOptionsBuilder.Build());
 
-                // Sustain a disconnect and reconnect
-                mqttClient.UseDisconnectedHandler(async (eventArgs) =>
-                {
-                    await Task.Delay(MqttSettingsModel.ConnectionDelayInMilliseconds).ContinueWith(async (arg) =>
+                    mqttClient.UseConnectedHandler((eventArgs) =>
                     {
-                        _logger.LogInformation($"Reconnecting to {clientConfig.Host} port {clientConfig.Port}");
-                        await mqttClient.ConnectAsync(mqttClientOptionsBuilder.Build());
+                        _logger.LogInformation($"Connected to {clientConfig.Host} port {clientConfig.Port}");
                     });
-                });
+
+                    // Sustain a disconnect and reconnect
+                    mqttClient.UseDisconnectedHandler(async (eventArgs) =>
+                    {
+                        await Task.Delay(MqttSettingsModel.ConnectionDelayInMilliseconds).ContinueWith(async (arg) =>
+                        {
+                            _logger.LogInformation($"Reconnecting to {clientConfig.Host} port {clientConfig.Port}");
+                            await mqttClient.ConnectAsync(mqttClientOptionsBuilder.Build());
+                        });
+                    });
+                }
+
+                Log.Debug($"Waiting {MqttSettingsModel.ConnectionDelayInMilliseconds} milliseconds before connecting to remote brokers");
+                Task.Delay(MqttSettingsModel.ConnectionDelayInMilliseconds);
+
+                // Connect to clients (all at once - in parallel)
+                // Disconnect logic (above) will handle failures and retries
+                Task.WaitAll(_mqttClients.Select(p => p.ConnectAsync(_mqttClientOptions[_mqttClients.IndexOf(p)])).Cast<Task>().ToArray());
             }
-
-            Log.Debug($"Waiting {MqttSettingsModel.ConnectionDelayInMilliseconds} milliseconds before connecting to remote brokers");
-            Task.Delay(MqttSettingsModel.ConnectionDelayInMilliseconds);
-
-            // Connect to clients (all at once - in parallel)
-            // Disconnect logic (above) will handle failures and retries
-            Task.WaitAll(_mqttClients.Select(p => p.ConnectAsync(_mqttClientOptions[_mqttClients.IndexOf(p)])).Cast<Task>().ToArray());
         }
 
         public Task RunWebSocketConnectionAsync(WebSocket webSocket, HttpContext httpContext)
