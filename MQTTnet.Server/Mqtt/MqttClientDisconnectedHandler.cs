@@ -13,13 +13,11 @@ namespace MQTTnet.Server.Mqtt
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public Task HandleClientDisconnectedAsync(MqttServerClientDisconnectedEventArgs eventArgs)
+        public Task HandleClientDisconnectedAsync(MqttServerClientDisconnectedEventArgs context)
         {
             try
             {
-                //TODO:
-
-                _logger.LogInformation($"Client disconnected: {eventArgs.ClientId}, Disconnect Type: {eventArgs.DisconnectType}");
+                _logger.LogInformation($"Client disconnected: {context.ClientId}, Disconnect Type: {context.DisconnectType}");
             }
             catch (Exception exception)
             {

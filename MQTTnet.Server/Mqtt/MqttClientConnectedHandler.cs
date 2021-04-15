@@ -13,13 +13,11 @@ namespace MQTTnet.Server.Mqtt
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public Task HandleClientConnectedAsync(MqttServerClientConnectedEventArgs eventArgs)
+        public Task HandleClientConnectedAsync(MqttServerClientConnectedEventArgs context)
         {
             try
             {
-                //TODO:
-
-                _logger.LogInformation($"Client connected: {eventArgs.ClientId}");
+                _logger.LogInformation($"Client connected: {context.ClientId}");
             }
             catch (Exception exception)
             {

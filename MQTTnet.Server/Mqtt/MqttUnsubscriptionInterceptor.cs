@@ -17,11 +17,12 @@ namespace MQTTnet.Server.Mqtt
         {
             try
             {
-                //TODO:
+                _logger.LogInformation($"Received unsubscribe request from '{context.ClientId}' for topic: '{context.Topic}'");
+                context.AcceptUnsubscription = true;
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "Error while intercepting unsubscription.");
+                _logger.LogError(exception, $"Error while handling unsubscribe request from '{context.ClientId}' for topic '{context.Topic}'");
             }
 
             return Task.CompletedTask;

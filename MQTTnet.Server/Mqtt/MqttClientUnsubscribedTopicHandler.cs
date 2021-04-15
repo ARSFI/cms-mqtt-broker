@@ -13,13 +13,11 @@ namespace MQTTnet.Server.Mqtt
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public Task HandleClientUnsubscribedTopicAsync(MqttServerClientUnsubscribedTopicEventArgs eventArgs)
+        public Task HandleClientUnsubscribedTopicAsync(MqttServerClientUnsubscribedTopicEventArgs context)
         {
             try
             {
-                //TODO:
-
-                _logger.LogInformation($"{eventArgs.ClientId} unsubscribed from: {eventArgs.TopicFilter}");
+                _logger.LogInformation($"Received unsubscribe request from '{context.ClientId}' for topic '{context.TopicFilter}");
             }
             catch (Exception exception)
             {

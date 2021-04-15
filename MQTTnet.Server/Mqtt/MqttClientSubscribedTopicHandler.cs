@@ -13,17 +13,15 @@ namespace MQTTnet.Server.Mqtt
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public Task HandleClientSubscribedTopicAsync(MqttServerClientSubscribedTopicEventArgs eventArgs)
+        public Task HandleClientSubscribedTopicAsync(MqttServerClientSubscribedTopicEventArgs context)
         {
             try
             {
-                //TODO:
-
-                _logger.LogInformation($"{eventArgs.ClientId} subscribed to: {eventArgs.TopicFilter.Topic}");
+                _logger.LogInformation($"Received subscribe request from '{context.ClientId}' for topic '{context.TopicFilter.Topic}");
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "Error while handling client subscribed topic event.");
+                _logger.LogError(exception, $"Error while handling client subscribed topic event from '{context.ClientId}'");
             }
 
             return Task.CompletedTask;

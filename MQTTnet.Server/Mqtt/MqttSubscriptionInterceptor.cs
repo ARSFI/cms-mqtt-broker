@@ -17,7 +17,7 @@ namespace MQTTnet.Server.Mqtt
         {
             try
             {
-                //TODO:
+                context.AcceptSubscription = true;
             }
             catch (Exception exception)
             {

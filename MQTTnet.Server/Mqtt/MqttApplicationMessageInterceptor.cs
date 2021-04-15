@@ -15,7 +15,7 @@ namespace MQTTnet.Server.Mqtt
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public void setServerService(IMqttServerService service)
+        public void SetServerService(IMqttServerService service)
         {
             _service = service ?? throw new ArgumentNullException(nameof(service));
         }
@@ -36,14 +36,16 @@ namespace MQTTnet.Server.Mqtt
                     {
                         if (client.IsConnected)
                         {
+                            // TODO: Maybe add topic filter option to limit which messages are sent to remote brokers?
+
                             client.PublishAsync(context.ApplicationMessage);
                         }
                     }
                 }
 
                 ////TODO: Temporary
-                //var payload = System.Text.Encoding.UTF8.GetString(arg.ApplicationMessage.Payload);
-                //Log.Debug($"Received message : {arg.ApplicationMessage.Topic} / {payload}");
+                var payload = System.Text.Encoding.UTF8.GetString(context.ApplicationMessage.Payload);
+                _logger.LogDebug($"Received message : {context.ApplicationMessage.Topic} / {payload}");
 
             }
             catch (Exception exception)
