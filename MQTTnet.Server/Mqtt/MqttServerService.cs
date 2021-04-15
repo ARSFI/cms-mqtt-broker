@@ -74,9 +74,9 @@ namespace MQTTnet.Server.Mqtt
         }
 
         // We return IEnumerable here so callers don't inadvertently modify the collection.
-        public IEnumerable<IMqttClient> Clients {  get { return _mqttClients; } }
-        
-        public MqttSettingsModel Settings { get { return _settings; } }
+        public IEnumerable<IMqttClient> Clients => _mqttClients;
+
+        public MqttSettingsModel Settings => _settings;
 
         public void Configure()
         {
@@ -93,14 +93,14 @@ namespace MQTTnet.Server.Mqtt
             _mqttClientOptions = new List<IMqttClientOptions>();
             var mqttFactory = new MqttFactory();
 
-            // Don't try to connect to other brokers if config not defined.
-            if (_settings.RemoteBrokers != null && _settings.RemoteBrokers.Count > 0)
+            // Don't try to connect to other brokers if none defined.
+            if (_settings.RemoteBrokers.Count > 0)
             {
                 foreach (var clientConfig in _settings.RemoteBrokers)
                 {
                     var mqttClient = mqttFactory.CreateMqttClient();
                     var mqttClientOptionsBuilder = new MqttClientOptionsBuilder()
-                        .WithClientId(_settings.BrokerClientId)
+                        .WithClientId(clientConfig.ClientId)
                         .WithTcpServer(
                             clientConfig.Host,
                             clientConfig.Port);

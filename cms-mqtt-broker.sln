@@ -24,8 +24,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".asp.net.version", ".asp.ne
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MQTTnet.Server", "MQTTnet.Server\MQTTnet.Server.csproj", "{7ADD96B7-C8E0-463E-8E0E-DF621DF631FD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".heavily.modified.example", ".heavily.modified.example", "{BD33D177-9AE7-49B6-A126-57E6E96D47BD}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,7 +65,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{05F8CFE3-04FA-45D3-8E81-A642FB9E1ABA} = {DAF732BA-C7A6-4410-9376-0511B8EB849A}
 		{DBD78885-901B-45BC-9578-F476F8B93893} = {3CF1A53C-723A-44F7-A7B0-07D3AF1C0899}
-		{7ADD96B7-C8E0-463E-8E0E-DF621DF631FD} = {BD33D177-9AE7-49B6-A126-57E6E96D47BD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {346EDF32-0094-4FB8-8C43-29CE4792F3ED}

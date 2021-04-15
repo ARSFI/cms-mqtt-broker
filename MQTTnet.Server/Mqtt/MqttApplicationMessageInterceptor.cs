@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using MQTTnet.Client;
@@ -29,16 +31,35 @@ namespace MQTTnet.Server.Mqtt
 
                 context.AcceptPublish = true;
 
-                // Avoid loops by not mirroring messages from other servers.
-                if (context.ClientId != _service.Settings.BrokerClientId)
+                // Avoid loops by not mirroring messages from remote servers.
+                if (_service.Settings.RemoteBrokers.Any(remoteBroker => context.ClientId == remoteBroker.ClientId))
                 {
-                    foreach (var client in _service.Clients)
-                    {
-                        if (client.IsConnected)
-                        {
-                            // TODO: Maybe add topic filter option to limit which messages are sent to remote brokers?
+                    return Task.CompletedTask;
+                }
 
-                            client.PublishAsync(context.ApplicationMessage);
+                foreach (var client in _service.Clients)
+                {
+                    if (client.IsConnected)
+                    {
+                        // Find topic filters for this connection. Default to match all topics
+                        var topicFilters = new List<string> {"#"}; 
+                        foreach (var remoteBroker in _service.Settings.RemoteBrokers)
+                        {
+                            if (remoteBroker.ClientId == client.Options.ClientId)
+                            {
+                                topicFilters = remoteBroker.TopicFilters;
+                            }
+                        }
+
+                        // Publish only matching topics
+                        foreach (var filter in topicFilters)
+                        {
+                            if (MqttTopicFilterComparer.IsMatch(context.ApplicationMessage.Topic, filter))
+                            {
+                                client.PublishAsync(context.ApplicationMessage);
+                                // Should only send once even if topic matches multiple topic filters
+                                break;
+                            }
                         }
                     }
                 }
@@ -46,7 +67,6 @@ namespace MQTTnet.Server.Mqtt
                 ////TODO: Temporary
                 var payload = System.Text.Encoding.UTF8.GetString(context.ApplicationMessage.Payload);
                 _logger.LogDebug($"Received message : {context.ApplicationMessage.Topic} / {payload}");
-
             }
             catch (Exception exception)
             {

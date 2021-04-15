@@ -8,7 +8,6 @@ namespace MQTTnet.Server.Configuration
     public class MqttSettingsModel
     {
         public const int ConnectionDelayInMilliseconds = 5000;
-        public const int StoppingDelayInMilliseconds = 2000;
 
         public MqttSettingsModel()
         {
