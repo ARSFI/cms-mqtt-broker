@@ -8,11 +8,15 @@ namespace MQTTnet.Server.Mqtt
     public class MqttApplicationMessageInterceptor : IMqttServerApplicationMessageInterceptor
     {
         private readonly ILogger _logger;
-        private readonly MqttServerService _service;
+        private IMqttServerService _service;
 
-        public MqttApplicationMessageInterceptor(MqttServerService service, ILogger<MqttApplicationMessageInterceptor> logger)
+        public MqttApplicationMessageInterceptor(ILogger<MqttApplicationMessageInterceptor> logger)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+
+        public void setServerService(IMqttServerService service)
+        {
             _service = service ?? throw new ArgumentNullException(nameof(service));
         }
 

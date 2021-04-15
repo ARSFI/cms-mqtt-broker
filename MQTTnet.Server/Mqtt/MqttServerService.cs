@@ -18,7 +18,7 @@ using NLog.Fluent;
 
 namespace MQTTnet.Server.Mqtt
 {
-    public class MqttServerService 
+    public class MqttServerService : IMqttServerService
     {
         private readonly ILogger<MqttServerService> _logger;
 
@@ -72,6 +72,8 @@ namespace MQTTnet.Server.Mqtt
             };
 
             _mqttServer = mqttFactory.CreateMqttServer(adapters);
+
+            _mqttApplicationMessageInterceptor.setServerService(this);
         }
 
         // We return IEnumerable here so callers don't inadvertently modify the collection.

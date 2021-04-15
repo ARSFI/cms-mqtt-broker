@@ -12,7 +12,6 @@
     <Authors>The authors of MQTTnet.Server.</Authors>
     <PackageId />
     <SignAssembly>false</SignAssembly>
-    <DelaySign>false</DelaySign>
     <LangVersion>latest</LangVersion>
     <Version>3.0.11</Version>
     <TypeScriptToolsVersion>3.3</TypeScriptToolsVersion>
