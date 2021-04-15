@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Security.Authentication;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MQTTnet.Adapter;
 using MQTTnet.AspNetCore;
@@ -14,7 +12,6 @@ using MQTTnet.Client;
 using MQTTnet.Client.Options;
 using MQTTnet.Implementations;
 using MQTTnet.Server.Configuration;
-using NLog.Fluent;
 
 namespace MQTTnet.Server.Mqtt
 {
@@ -73,7 +70,7 @@ namespace MQTTnet.Server.Mqtt
 
             _mqttServer = mqttFactory.CreateMqttServer(adapters);
 
-            _mqttApplicationMessageInterceptor.setServerService(this);
+            _mqttApplicationMessageInterceptor.SetServerService(this);
         }
 
         // We return IEnumerable here so callers don't inadvertently modify the collection.
@@ -126,12 +123,25 @@ namespace MQTTnet.Server.Mqtt
                     });
                 }
 
-                Log.Debug($"Waiting {MqttSettingsModel.ConnectionDelayInMilliseconds} milliseconds before connecting to remote brokers");
+                _logger.LogDebug($"Waiting {MqttSettingsModel.ConnectionDelayInMilliseconds} milliseconds before connecting to remote brokers");
                 Task.Delay(MqttSettingsModel.ConnectionDelayInMilliseconds);
 
-                // Connect to clients (all at once - in parallel)
-                // Disconnect logic (above) will handle failures and retries
-                Task.WaitAll(_mqttClients.Select(p => p.ConnectAsync(_mqttClientOptions[_mqttClients.IndexOf(p)])).Cast<Task>().ToArray());
+                try
+                {
+                    // Connect to clients (all at once - in parallel)
+                    Task.WaitAll(_mqttClients.Select(p => p.ConnectAsync(_mqttClientOptions[_mqttClients.IndexOf(p)])).Cast<Task>().ToArray());
+                }
+                catch (AggregateException ae)
+                {
+                    // Ignore initial errors
+                    // Disconnect logic (above) will handle retries
+                    ae.Handle(inner =>
+                    {
+                        _logger.LogDebug(ae.Message);
+                        return true;
+                    });
+                }
+
             }
         }
 
