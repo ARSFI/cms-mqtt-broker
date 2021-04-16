@@ -19,17 +19,17 @@ namespace MQTTnet.Server.Mqtt
     {
         private readonly ILogger<MqttServerService> _logger;
 
-        readonly MqttSettingsModel _settings;
-        readonly MqttApplicationMessageInterceptor _mqttApplicationMessageInterceptor;
-        readonly MqttClientConnectedHandler _mqttClientConnectedHandler;
-        readonly MqttClientDisconnectedHandler _mqttClientDisconnectedHandler;
-        readonly MqttClientSubscribedTopicHandler _mqttClientSubscribedTopicHandler;
-        readonly MqttClientUnsubscribedTopicHandler _mqttClientUnsubscribedTopicHandler;
-        readonly MqttServerConnectionValidator _mqttConnectionValidator;
-        readonly IMqttServer _mqttServer;
-        readonly MqttSubscriptionInterceptor _mqttSubscriptionInterceptor;
-        readonly MqttUnsubscriptionInterceptor _mqttUnsubscriptionInterceptor;
-        readonly MqttWebSocketServerAdapter _webSocketServerAdapter;
+        private readonly MqttSettingsModel _settings;
+        private readonly MqttApplicationMessageInterceptor _mqttApplicationMessageInterceptor;
+        private readonly MqttClientConnectedHandler _mqttClientConnectedHandler;
+        private readonly MqttClientDisconnectedHandler _mqttClientDisconnectedHandler;
+        private readonly MqttClientSubscribedTopicHandler _mqttClientSubscribedTopicHandler;
+        private readonly MqttClientUnsubscribedTopicHandler _mqttClientUnsubscribedTopicHandler;
+        private readonly MqttServerConnectionValidator _mqttConnectionValidator;
+        private readonly IMqttServer _mqttServer;
+        private readonly MqttSubscriptionInterceptor _mqttSubscriptionInterceptor;
+        private readonly MqttUnsubscriptionInterceptor _mqttUnsubscriptionInterceptor;
+        private readonly MqttWebSocketServerAdapter _webSocketServerAdapter;
 
         private List<IMqttClient> _mqttClients;
         private List<IMqttClientOptions> _mqttClientOptions;
@@ -101,8 +101,12 @@ namespace MQTTnet.Server.Mqtt
                     var mqttClient = mqttFactory.CreateMqttClient();
                     var mqttClientOptionsBuilder = new MqttClientOptionsBuilder()
                         .WithClientId(clientConfig.ClientId)
+                        .WithCleanSession()
+                        .WithCredentials(
+                            clientConfig.UserId, 
+                            clientConfig.UserPassword)
                         .WithTcpServer(
-                            clientConfig.Host,
+                            clientConfig.Host, 
                             clientConfig.Port);
                     _mqttClients.Add(mqttClient);
                     _mqttClientOptions.Add(mqttClientOptionsBuilder.Build());
