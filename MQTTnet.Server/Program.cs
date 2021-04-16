@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using MQTTnet.Server.Mqtt;
 using NLog.Web;
 
 namespace MQTTnet.Server
@@ -25,6 +24,7 @@ namespace MQTTnet.Server
                                 logging.ClearProviders();
                                 logging.SetMinimumLevel(LogLevel.Trace);
                             })
+                            .UseUrls() // Remove default Kestrel ports
                             .UseNLog()
                             .UseStartup<Startup>();
                     })
