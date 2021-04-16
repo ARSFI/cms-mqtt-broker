@@ -26,12 +26,9 @@ namespace MQTTnet.Server.Mqtt
         {
             try
             {
-                // This might be not set when a message was published by the server instead of a client.
-                context.SessionItems.TryGetValue(MqttServerConnectionValidator.WrappedSessionItemsKey, out var sessionItems);
-
                 context.AcceptPublish = true;
 
-                // Avoid loops by not mirroring messages from remote servers.
+                // Avoid loops by not mirroring messages from remote brokers.
                 if (_service.Settings.RemoteBrokers.Any(remoteBroker => context.ClientId == remoteBroker.ClientId))
                 {
                     return Task.CompletedTask;
