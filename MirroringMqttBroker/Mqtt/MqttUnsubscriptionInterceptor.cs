@@ -1,8 +1,9 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using MQTTnet.Server;
 
-namespace MQTTnet.Server.Mqtt
+namespace MirroringMqttBroker.Mqtt
 {
     public class MqttUnsubscriptionInterceptor : IMqttServerUnsubscriptionInterceptor
     {

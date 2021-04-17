@@ -3,12 +3,12 @@
   <PropertyGroup>
     <TargetFrameworks>net5.0</TargetFrameworks>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
-    <AssemblyName>MQTTnet.Server</AssemblyName>
-    <RootNamespace>MQTTnet.Server</RootNamespace>
+    <AssemblyName>MirroringMqttBroker</AssemblyName>
+    <RootNamespace>MirroringMqttBroker</RootNamespace>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <Company />
     <Product></Product>
-    <Description>Mirroring MQTT Broker</Description>
+    <Description></Description>
     <Authors></Authors>
     <PackageId />
     <SignAssembly>false</SignAssembly>
@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <StartupObject>MQTTnet.Server.Program</StartupObject>
+    <StartupObject>MirroringMqttBroker.Program</StartupObject>
     <UserSecretsId>c564f0de-28b4-45bf-b726-4d665d705653</UserSecretsId>
     <Copyright></Copyright>
     <PackageProjectUrl></PackageProjectUrl>

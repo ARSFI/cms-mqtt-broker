@@ -6,15 +6,17 @@ using System.Security.Authentication;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using MirroringMqttBroker.Configuration;
+using MQTTnet;
 using MQTTnet.Adapter;
 using MQTTnet.AspNetCore;
 using MQTTnet.Client;
 using MQTTnet.Client.Options;
 using MQTTnet.Formatter;
 using MQTTnet.Implementations;
-using MQTTnet.Server.Configuration;
+using MQTTnet.Server;
 
-namespace MQTTnet.Server.Mqtt
+namespace MirroringMqttBroker.Mqtt
 {
     public class MqttServerService : IMqttServerService
     {

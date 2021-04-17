@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using MirroringMqttBroker.Configuration;
 using MQTTnet.Client;
-using MQTTnet.Server.Configuration;
 
-namespace MQTTnet.Server.Mqtt
+namespace MirroringMqttBroker.Mqtt
 {
     public interface IMqttServerService
     {

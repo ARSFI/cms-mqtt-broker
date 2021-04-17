@@ -1,10 +1,11 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using MirroringMqttBroker.Configuration;
 using MQTTnet.Protocol;
-using MQTTnet.Server.Configuration;
+using MQTTnet.Server;
 
-namespace MQTTnet.Server.Mqtt
+namespace MirroringMqttBroker.Mqtt
 {
     public class MqttServerConnectionValidator : IMqttServerConnectionValidator
     {

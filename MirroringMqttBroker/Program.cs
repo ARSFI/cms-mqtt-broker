@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog.Web;
 
-namespace MQTTnet.Server
+namespace MirroringMqttBroker
 {
     public static class Program
     {

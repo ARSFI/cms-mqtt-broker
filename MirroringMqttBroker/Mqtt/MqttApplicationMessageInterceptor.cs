@@ -4,8 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using MQTTnet.Client;
+using MQTTnet.Server;
 
-namespace MQTTnet.Server.Mqtt
+namespace MirroringMqttBroker.Mqtt
 {
     public class MqttApplicationMessageInterceptor : IMqttServerApplicationMessageInterceptor
     {

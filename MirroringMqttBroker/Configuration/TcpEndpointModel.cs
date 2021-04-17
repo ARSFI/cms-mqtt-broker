@@ -1,7 +1,6 @@
-﻿using System.IO;
-using System.Net;
+﻿using System.Net;
 
-namespace MQTTnet.Server.Configuration
+namespace MirroringMqttBroker.Configuration
 {
     /// <summary>
     /// Listen Entry Settings Model

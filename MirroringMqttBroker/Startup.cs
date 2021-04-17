@@ -3,11 +3,11 @@ using System.Net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MirroringMqttBroker.Configuration;
+using MirroringMqttBroker.Mqtt;
 using MQTTnet.AspNetCore;
-using MQTTnet.Server.Configuration;
-using MQTTnet.Server.Mqtt;
 
-namespace MQTTnet.Server
+namespace MirroringMqttBroker
 {
     public class Startup
     {

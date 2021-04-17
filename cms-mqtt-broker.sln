@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".tests", ".tests", "{DAF732
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NLog.Targets.Gelf", "NLog.Targets.Gelf\NLog.Targets.Gelf.csproj", "{56CADC1F-EF83-4487-9751-69B5259678DF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MirroringMqttBroker", "MQTTnet.Server\MirroringMqttBroker.csproj", "{7ADD96B7-C8E0-463E-8E0E-DF621DF631FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MirroringMqttBroker", "MirroringMqttBroker\MirroringMqttBroker.csproj", "{7ADD96B7-C8E0-463E-8E0E-DF621DF631FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

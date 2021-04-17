@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MQTTnet.Server.Configuration
+namespace MirroringMqttBroker.Configuration
 {
     public class RemoteBrokerConfiguration
     {

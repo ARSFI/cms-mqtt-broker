@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace MQTTnet.Server.Configuration
+namespace MirroringMqttBroker.Configuration
 {
     public class CertificateSettingsModel
     {
