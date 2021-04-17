@@ -12,6 +12,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NLog.Targets.Gelf", "NLog.T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MirroringMqttBroker", "MirroringMqttBroker\MirroringMqttBroker.csproj", "{7ADD96B7-C8E0-463E-8E0E-DF621DF631FD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{B65F5DF7-4413-475A-8C07-793AA8CCE422}"
+	ProjectSection(SolutionItems) = preProject
+		SolutionItems\MirroringMqttBrokerSetup.iss = SolutionItems\MirroringMqttBrokerSetup.iss
+		SolutionItems\README.md = SolutionItems\README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

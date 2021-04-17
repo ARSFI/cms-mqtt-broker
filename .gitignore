@@ -351,4 +351,8 @@ MigrationBackup/
 
 # dotnet-tools
 .config/
-/MQTTnet.Server/Output/CMS MQTT Broker 1.0.0.exe
+
+# inno setup output
+[Oo]utput/
+
+

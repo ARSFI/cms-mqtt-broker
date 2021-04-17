@@ -145,7 +145,7 @@ namespace MirroringMqttBroker.Mqtt
                     // Disconnect logic (above) will handle retries
                     ae.Handle(inner =>
                     {
-                        _logger.LogDebug(ae.Message);
+                        _logger.LogTrace(ae.Message);
                         return true;
                     });
                 }
@@ -187,6 +187,7 @@ namespace MirroringMqttBroker.Mqtt
                 if (_settings.TcpEndPoint.Port > 0)
                 {
                     options.WithDefaultEndpointPort(_settings.TcpEndPoint.Port);
+                    _logger.LogInformation($"MQTT Broker listening on TCP port {_settings.TcpEndPoint.Port}");
                 }
             }
             else
@@ -229,6 +230,7 @@ namespace MirroringMqttBroker.Mqtt
                 if (_settings.EncryptedTcpEndPoint.Port > 0)
                 {
                     options.WithEncryptedEndpointPort(_settings.EncryptedTcpEndPoint.Port);
+                    _logger.LogInformation($"MQTT Broker listening on SSL port {_settings.TcpEndPoint.Port}");
                 }
             }
             else
