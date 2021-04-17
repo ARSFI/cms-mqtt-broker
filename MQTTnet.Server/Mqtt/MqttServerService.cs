@@ -10,6 +10,7 @@ using MQTTnet.Adapter;
 using MQTTnet.AspNetCore;
 using MQTTnet.Client;
 using MQTTnet.Client.Options;
+using MQTTnet.Formatter;
 using MQTTnet.Implementations;
 using MQTTnet.Server.Configuration;
 
@@ -107,7 +108,8 @@ namespace MQTTnet.Server.Mqtt
                             clientConfig.UserPassword)
                         .WithTcpServer(
                             clientConfig.Host, 
-                            clientConfig.Port);
+                            clientConfig.Port)
+                        .WithProtocolVersion(MqttProtocolVersion.V500);
                     _mqttClients.Add(mqttClient);
                     _mqttClientOptions.Add(mqttClientOptionsBuilder.Build());
 
@@ -128,7 +130,7 @@ namespace MQTTnet.Server.Mqtt
                 }
 
                 _logger.LogDebug($"Waiting {MqttSettingsModel.ConnectionDelayInMilliseconds} milliseconds before connecting to remote brokers");
-                Task.Delay(MqttSettingsModel.ConnectionDelayInMilliseconds);
+                Task.Delay(MqttSettingsModel.ConnectionDelayInMilliseconds).Wait();
 
                 try
                 {

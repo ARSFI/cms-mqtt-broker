@@ -3,14 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.808.10
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mirroring MQTT Broker", "Mirroring MQTT Broker\Mirroring MQTT Broker.csproj", "{71B715FF-27E1-40C0-ADCB-F47549CA2667}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMS MQTT Broker Service", "CMS MQTT Broker Service\CMS MQTT Broker Service.csproj", "{56CB1CBF-72E4-4EEF-8792-049B4140A05D}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMS_MQTT_Broker_Standalone", "CMS_MQTT_Broker_Standalone\CMS_MQTT_Broker_Standalone.csproj", "{05F8CFE3-04FA-45D3-8E81-A642FB9E1ABA}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mirroring MQTT Broker Configuration", "Mirroring MQTT Broker Configuration\Mirroring MQTT Broker Configuration.csproj", "{60B7DB52-0D33-44BA-B10C-7C2332E276C7}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".tests", ".tests", "{DAF732BA-C7A6-4410-9376-0511B8EB849A}"
 	ProjectSection(SolutionItems) = preProject
 		Tests\WebSocketTest.html = Tests\WebSocketTest.html
@@ -18,11 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".tests", ".tests", "{DAF732
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NLog.Targets.Gelf", "NLog.Targets.Gelf\NLog.Targets.Gelf.csproj", "{56CADC1F-EF83-4487-9751-69B5259678DF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMS MQTT Service", "CMS MQTT Service\CMS MQTT Service.csproj", "{DBD78885-901B-45BC-9578-F476F8B93893}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".asp.net.version", ".asp.net.version", "{3CF1A53C-723A-44F7-A7B0-07D3AF1C0899}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MQTTnet.Server", "MQTTnet.Server\MQTTnet.Server.csproj", "{7ADD96B7-C8E0-463E-8E0E-DF621DF631FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MirroringMqttBroker", "MQTTnet.Server\MirroringMqttBroker.csproj", "{7ADD96B7-C8E0-463E-8E0E-DF621DF631FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,30 +18,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{71B715FF-27E1-40C0-ADCB-F47549CA2667}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{71B715FF-27E1-40C0-ADCB-F47549CA2667}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{71B715FF-27E1-40C0-ADCB-F47549CA2667}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{71B715FF-27E1-40C0-ADCB-F47549CA2667}.Release|Any CPU.Build.0 = Release|Any CPU
-		{56CB1CBF-72E4-4EEF-8792-049B4140A05D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{56CB1CBF-72E4-4EEF-8792-049B4140A05D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{56CB1CBF-72E4-4EEF-8792-049B4140A05D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{56CB1CBF-72E4-4EEF-8792-049B4140A05D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{05F8CFE3-04FA-45D3-8E81-A642FB9E1ABA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{05F8CFE3-04FA-45D3-8E81-A642FB9E1ABA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{05F8CFE3-04FA-45D3-8E81-A642FB9E1ABA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{05F8CFE3-04FA-45D3-8E81-A642FB9E1ABA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{60B7DB52-0D33-44BA-B10C-7C2332E276C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{60B7DB52-0D33-44BA-B10C-7C2332E276C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{60B7DB52-0D33-44BA-B10C-7C2332E276C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{60B7DB52-0D33-44BA-B10C-7C2332E276C7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{56CADC1F-EF83-4487-9751-69B5259678DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{56CADC1F-EF83-4487-9751-69B5259678DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56CADC1F-EF83-4487-9751-69B5259678DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56CADC1F-EF83-4487-9751-69B5259678DF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DBD78885-901B-45BC-9578-F476F8B93893}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DBD78885-901B-45BC-9578-F476F8B93893}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DBD78885-901B-45BC-9578-F476F8B93893}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DBD78885-901B-45BC-9578-F476F8B93893}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7ADD96B7-C8E0-463E-8E0E-DF621DF631FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7ADD96B7-C8E0-463E-8E0E-DF621DF631FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7ADD96B7-C8E0-463E-8E0E-DF621DF631FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -61,10 +29,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{05F8CFE3-04FA-45D3-8E81-A642FB9E1ABA} = {DAF732BA-C7A6-4410-9376-0511B8EB849A}
-		{DBD78885-901B-45BC-9578-F476F8B93893} = {3CF1A53C-723A-44F7-A7B0-07D3AF1C0899}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {346EDF32-0094-4FB8-8C43-29CE4792F3ED}

@@ -28,8 +28,8 @@ namespace MQTTnet.Server
         {
             application.UseDefaultFiles();
             application.UseStaticFiles();
-
             application.UseHsts();
+            
             application.UseCors(x => x
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
