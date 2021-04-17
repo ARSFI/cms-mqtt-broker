@@ -1,4 +1,4 @@
-# CMS MQTT Broker
+# Mirroring MQTT Broker
 
 A multi-server cluster of MQTT brokers to enable sharing information between broker instances.  
 
