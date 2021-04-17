@@ -9,8 +9,6 @@ namespace MirroringMqttBroker.Mqtt
 {
     public class MqttServerConnectionValidator : IMqttServerConnectionValidator
     {
-        public const string WrappedSessionItemsKey = "WRAPPED_ITEMS";
-
         private readonly ILogger _logger;
         private readonly MqttSettingsModel _mqttSettingsModel;
 
@@ -24,18 +22,28 @@ namespace MirroringMqttBroker.Mqtt
         {
             try
             {
-                if (!_mqttSettingsModel.RequireClientAuthentication || context.Username == _mqttSettingsModel.BrokerUsername &&
-                    context.Password == _mqttSettingsModel.BrokerPassword)
+                if (!_mqttSettingsModel.RequireClientAuthentication)
                 {
                     context.ReasonCode = MqttConnectReasonCode.Success;
                     _logger.LogInformation($"New connection - ClientId: {context.ClientId}");
-                }
-                else
-                {
-                    context.ReasonCode = MqttConnectReasonCode.BadUserNameOrPassword;
-                    _logger.LogInformation($"Invalid connection attempt - ClientId: {context.ClientId}, Username: {context.Username}");
+                    return Task.CompletedTask;
                 }
 
+                // Search for matching credentials
+                foreach (var clientCredential in _mqttSettingsModel.ClientCredentials)
+                {
+                    if (context.Username.Equals(clientCredential.UserName, StringComparison.OrdinalIgnoreCase) &&
+                        context.Password == clientCredential.Password)
+                    {
+                        context.ReasonCode = MqttConnectReasonCode.Success;
+                        _logger.LogInformation($"New validated connection - ClientId: {context.ClientId}");
+                        return Task.CompletedTask;
+                    }
+                }
+
+                // Otherwise, reject connection
+                context.ReasonCode = MqttConnectReasonCode.BadUserNameOrPassword;
+                _logger.LogWarning($"Invalid connection attempt - ClientId: {context.ClientId}, Username: {context.Username}");
             }
             catch (Exception ex)
             {

@@ -12,6 +12,7 @@ namespace MirroringMqttBroker.Configuration
         public MqttSettingsModel()
         {
             RemoteBrokers = new List<RemoteBrokerConfiguration>();
+            ClientCredentials = new List<ClientCredential>();
         }
 
         /// <summary>
@@ -50,24 +51,19 @@ namespace MirroringMqttBroker.Configuration
         public int MaxPendingMessagesPerClient { get; set; } = 250;
 
         /// <summary>
-        /// Flag to control use of client authentication 
-        /// </summary>
-        public bool RequireClientAuthentication { get; set; } = false;
-        
-        /// <summary>
         /// Unique ID for this MQTT Broker instance
         /// </summary>
         public string BrokerClientId { get; set; }
 
         /// <summary>
-        /// The username to use to connect to this broker 
+        /// Flag to control use of client authentication 
         /// </summary>
-        public string BrokerUsername { get; set; }
+        public bool RequireClientAuthentication { get; set; } = false;
 
         /// <summary>
-        /// The password to use to connect to this broker
+        /// List of allowed client credentials. Used when RequireClientAuthentication is true.
         /// </summary>
-        public string BrokerPassword { get; set; }
+        public List<ClientCredential> ClientCredentials { get; set; }
 
         /// <summary>
         /// The other broker(s) IP address/hostname, etc.

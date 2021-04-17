@@ -106,8 +106,8 @@ namespace MirroringMqttBroker.Mqtt
                         .WithClientId(clientConfig.ClientId)
                         .WithCleanSession()
                         .WithCredentials(
-                            clientConfig.UserId, 
-                            clientConfig.UserPassword)
+                            clientConfig.UserName, 
+                            clientConfig.Password)
                         .WithTcpServer(
                             clientConfig.Host, 
                             clientConfig.Port)

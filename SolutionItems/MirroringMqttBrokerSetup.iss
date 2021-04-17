@@ -146,16 +146,16 @@ begin
     NodeName:= UpperCase(NodeName);
     case (NodeName) of
       'CMS-A' : begin 
-                  DeleteFile(Path+'appSettings.json');
-                  RenameFile(Path+'appSettings.cms-a.json',Path+'appSettings.json');
+                  DeleteFile(Path+'\appSettings.json');
+                  RenameFile(Path+'\appSettings.cms-a.json',Path+'\appSettings.json');
                 end;
       'CMS-B' : begin 
-                  DeleteFile(Path+'appSettings.json');
-                  RenameFile(Path+'appSettings.cms-b.json',Path+'appSettings.json');
+                  DeleteFile(Path+'\appSettings.json');
+                  RenameFile(Path+'\appSettings.cms-b.json',Path+'\appSettings.json');
                 end;
       'CMS-Z' : begin 
-                  DeleteFile(Path+'appSettings.json');
-                  RenameFile(Path+'appSettings.cms-z.json',Path+'appSettings.json');
+                  DeleteFile(Path+'\appSettings.json');
+                  RenameFile(Path+'\appSettings.cms-z.json',Path+'\appSettings.json');
                 end;
     end;
 end;

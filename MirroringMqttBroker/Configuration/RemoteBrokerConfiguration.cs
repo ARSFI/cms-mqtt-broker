@@ -17,8 +17,15 @@ namespace MirroringMqttBroker.Configuration
         /// </summary>
         public string ClientId { get; set; }
 
-        public string UserId { get; set; }
-        public string UserPassword { get; set; }
+        /// <summary>
+        /// User name used to authenticate with the remote broker (if required)
+        /// </summary>
+        public string UserName { get; set; }
+
+        /// <summary>
+        /// User Password used to authenticate with the remote broker (if required)
+        /// </summary>
+        public string Password { get; set; }
         
         /// <summary>
         /// List of topics to forward to this remote broker

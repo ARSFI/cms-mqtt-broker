@@ -6,10 +6,10 @@
     <AssemblyName>MirroringMqttBroker</AssemblyName>
     <RootNamespace>MirroringMqttBroker</RootNamespace>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <Company />
+    <Company>Amateur Radio Safety Foundation, Inc.</Company> 
     <Product></Product>
     <Description></Description>
-    <Authors></Authors>
+    <Authors>Lee Inman, K0QED; Mooneer Salem, K6AQ</Authors>
     <PackageId />
     <SignAssembly>false</SignAssembly>
     <LangVersion>latest</LangVersion>
@@ -20,7 +20,7 @@
   <PropertyGroup>
     <StartupObject>MirroringMqttBroker.Program</StartupObject>
     <UserSecretsId>c564f0de-28b4-45bf-b726-4d665d705653</UserSecretsId>
-    <Copyright></Copyright>
+    <Copyright>Copyright © 2021 Amateur Radio Safety Foundation, Inc.</Copyright>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl></RepositoryUrl>
   </PropertyGroup>
@@ -81,5 +81,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="6" /></VisualStudio></ProjectExtensions>
 
 </Project>
