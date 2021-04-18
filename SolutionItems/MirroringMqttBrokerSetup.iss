@@ -47,8 +47,10 @@ Source: "{#SourceDir}web.config"; DestDir: "{app}"
 Source: "{#SourceDir}NLog.config"; DestDir: "{app}"; AfterInstall: ChangeLogServer('{app}\NLog.config')
 
 [Run]
-;change to 'auto' start for final version
-Filename: {sys}\sc.exe; Parameters: "create MirroringMqttBroker DisplayName= ""Mirroring MQTT Broker"" start= demand binPath= ""{app}\MirroringMqttBroker.exe""" ; Flags: runhidden; AfterInstall: SelectSettingsFileForServer('{app}')
+Filename: {sys}\sc.exe; Parameters: "create MirroringMqttBroker DisplayName= ""Mirroring MQTT Broker"" \
+  start= {code:GetServiceStartMode} \
+  binPath= ""{app}\MirroringMqttBroker.exe""" ; Flags: runhidden; \
+  AfterInstall: SelectSettingsFileForServer()
             
 
 [UninstallRun]
@@ -137,25 +139,41 @@ begin
 end;
 
 //select a appsettings.json file for the current server 
-procedure SelectSettingsFileForServer(Path : String);
+procedure SelectSettingsFileForServer();
 var
     NodeName: String;
+    Path: String;
 begin
     //read c:\cms\cms.ini and get node name property
     NodeName:= GetIniString('Settings', 'NodeName', '', 'C:\CMS\CMS Settings.ini');
     NodeName:= UpperCase(NodeName);
+    Path:= ExpandConstant('{app}');
+    Path:= AddBackslash(Path);
+    //MsgBox(Path, mbInformation, MB_OK);
+
     case (NodeName) of
       'CMS-A' : begin 
-                  DeleteFile(Path+'\appSettings.json');
-                  RenameFile(Path+'\appSettings.cms-a.json',Path+'\appSettings.json');
+                  FileCopy(Path + 'appSettings.cms-a.json', Path + 'appSettings.json', False);
                 end;
       'CMS-B' : begin 
-                  DeleteFile(Path+'\appSettings.json');
-                  RenameFile(Path+'\appSettings.cms-b.json',Path+'\appSettings.json');
+                  FileCopy(Path + 'appSettings.cms-b.json', Path + 'appSettings.json', False);
                 end;
       'CMS-Z' : begin 
-                  DeleteFile(Path+'\appSettings.json');
-                  RenameFile(Path+'\appSettings.cms-z.json',Path+'\appSettings.json');
+                  FileCopy(Path + 'appSettings.cms-z.json', Path + 'appSettings.json', False);
                 end;
+    end;
+end;
+
+//test server type (test or production) and return start mode for service (demand or auto)
+function GetServiceStartMode(Param: String): String;
+var
+    TestSite: String;
+begin 
+    TestSite:= GetIniString('Settings', 'TestSite', 'TRUE', 'C:\CMS\CMS Settings.ini');
+    TestSite:= UpperCase(TestSite);
+    if TestSite = 'TRUE' then begin
+        Result:= 'demand';
+    end else begin
+        Result:= 'auto';
     end;
 end;
