@@ -32,8 +32,8 @@ namespace MirroringMqttBroker.Mqtt
                 // Search for matching credentials
                 foreach (var clientCredential in _mqttSettingsModel.ClientCredentials)
                 {
-                    if (context.Username.Equals(clientCredential.UserName, StringComparison.OrdinalIgnoreCase) &&
-                        context.Password == clientCredential.Password)
+                    if (context.Username != null && context.Username.Equals(clientCredential.UserName, 
+                        StringComparison.OrdinalIgnoreCase) && context.Password == clientCredential.Password)
                     {
                         context.ReasonCode = MqttConnectReasonCode.Success;
                         _logger.LogInformation($"New validated connection - ClientId: {context.ClientId}");

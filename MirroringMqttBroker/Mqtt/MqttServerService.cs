@@ -34,8 +34,8 @@ namespace MirroringMqttBroker.Mqtt
         private readonly MqttUnsubscriptionInterceptor _mqttUnsubscriptionInterceptor;
         private readonly MqttWebSocketServerAdapter _webSocketServerAdapter;
 
-        private List<IMqttClient> _mqttClients;
-        private List<IMqttClientOptions> _mqttClientOptions;
+        private List<IMqttClient> _mqttRemoteBrokers;
+        private List<IMqttClientOptions> _mqttRemoteBrokerOptions;
 
         public MqttServerService(
             MqttSettingsModel mqttSettings,
@@ -77,7 +77,7 @@ namespace MirroringMqttBroker.Mqtt
         }
 
         // We return IEnumerable here so callers don't inadvertently modify the collection.
-        public IEnumerable<IMqttClient> Clients => _mqttClients;
+        public IEnumerable<IMqttClient> RemoteBrokers => _mqttRemoteBrokers;
 
         public MqttSettingsModel Settings => _settings;
 
@@ -92,41 +92,41 @@ namespace MirroringMqttBroker.Mqtt
             _logger.LogInformation("MQTT server started.");
 
             // Connect to remote brokers 
-            _mqttClients = new List<IMqttClient>();
-            _mqttClientOptions = new List<IMqttClientOptions>();
+            _mqttRemoteBrokers = new List<IMqttClient>();
+            _mqttRemoteBrokerOptions = new List<IMqttClientOptions>();
             var mqttFactory = new MqttFactory();
 
             // Don't try to connect to other brokers if none defined.
             if (_settings.RemoteBrokers.Count > 0)
             {
-                foreach (var clientConfig in _settings.RemoteBrokers)
+                foreach (var remoteBrokerConfig in _settings.RemoteBrokers)
                 {
-                    var mqttClient = mqttFactory.CreateMqttClient();
+                    var mqttRemoteBroker = mqttFactory.CreateMqttClient();
                     var mqttClientOptionsBuilder = new MqttClientOptionsBuilder()
-                        .WithClientId(clientConfig.ClientId)
+                        .WithClientId(remoteBrokerConfig.ClientId)
                         .WithCleanSession()
                         .WithCredentials(
-                            clientConfig.UserName, 
-                            clientConfig.Password)
+                            remoteBrokerConfig.UserName,
+                            remoteBrokerConfig.Password)
                         .WithTcpServer(
-                            clientConfig.Host, 
-                            clientConfig.Port)
+                            remoteBrokerConfig.Host,
+                            remoteBrokerConfig.Port)
                         .WithProtocolVersion(MqttProtocolVersion.V500);
-                    _mqttClients.Add(mqttClient);
-                    _mqttClientOptions.Add(mqttClientOptionsBuilder.Build());
+                    _mqttRemoteBrokers.Add(mqttRemoteBroker);
+                    _mqttRemoteBrokerOptions.Add(mqttClientOptionsBuilder.Build());
 
-                    mqttClient.UseConnectedHandler((eventArgs) =>
+                    mqttRemoteBroker.UseConnectedHandler((eventArgs) =>
                     {
-                        _logger.LogInformation($"Connected to {clientConfig.Host} port {clientConfig.Port}");
+                        _logger.LogInformation($"Connected to {remoteBrokerConfig.Host} port {remoteBrokerConfig.Port}");
                     });
 
                     // Sustain a disconnect and reconnect
-                    mqttClient.UseDisconnectedHandler(async (eventArgs) =>
+                    mqttRemoteBroker.UseDisconnectedHandler(async (eventArgs) =>
                     {
                         await Task.Delay(MqttSettingsModel.ConnectionDelayInMilliseconds).ContinueWith(async (arg) =>
                         {
-                            _logger.LogInformation($"Reconnecting to {clientConfig.Host} port {clientConfig.Port}");
-                            await mqttClient.ConnectAsync(mqttClientOptionsBuilder.Build());
+                            _logger.LogInformation($"Reconnecting to {remoteBrokerConfig.Host} port {remoteBrokerConfig.Port}");
+                            await mqttRemoteBroker.ConnectAsync(mqttClientOptionsBuilder.Build());
                         });
                     });
                 }
@@ -137,7 +137,7 @@ namespace MirroringMqttBroker.Mqtt
                 try
                 {
                     // Connect to clients (all at once - in parallel)
-                    Task.WaitAll(_mqttClients.Select(p => p.ConnectAsync(_mqttClientOptions[_mqttClients.IndexOf(p)])).Cast<Task>().ToArray());
+                    Task.WaitAll(_mqttRemoteBrokers.Select(p => p.ConnectAsync(_mqttRemoteBrokerOptions[_mqttRemoteBrokers.IndexOf(p)])).Cast<Task>().ToArray());
                 }
                 catch (AggregateException ae)
                 {

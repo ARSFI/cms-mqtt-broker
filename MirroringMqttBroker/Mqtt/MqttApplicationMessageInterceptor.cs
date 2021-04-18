@@ -35,22 +35,22 @@ namespace MirroringMqttBroker.Mqtt
             {
                 context.AcceptPublish = true;
 
-                // Avoid loops by not mirroring messages from remote brokers.
+                // Avoid loops by not mirroring messages that have been forwarded by other brokers.
                 if (context.ApplicationMessage.CorrelationData != null && context.ApplicationMessage.CorrelationData.SequenceEqual(ForwardedSignature))
                 {
-                    _logger.LogTrace($"Detected already forwarded message. Remote Client ID: {context.ClientId}, Topic {context.ApplicationMessage.Topic}");
+                    _logger.LogDebug($"Detected already forwarded message. Remote Client ID: {context.ClientId}, Topic {context.ApplicationMessage.Topic}");
                     return Task.CompletedTask;
                 }
             
-                foreach (var client in _service.Clients)
+                foreach (var broker in _service.RemoteBrokers)
                 {
-                    if (client.IsConnected)
+                    if (broker.IsConnected)
                     {
                         // Find topic filters for this connection. Default to match all topics
                         var topicFilters = new List<string> { "#" };
                         foreach (var remoteBroker in _service.Settings.RemoteBrokers)
                         {
-                            if (remoteBroker.ClientId == client.Options.ClientId)
+                            if (remoteBroker.ClientId == broker.Options.ClientId)
                             {
                                 topicFilters = remoteBroker.TopicFilters;
                             }
@@ -61,11 +61,11 @@ namespace MirroringMqttBroker.Mqtt
                         {
                             if (MqttTopicFilterComparer.IsMatch(context.ApplicationMessage.Topic, filter))
                             {
-                                _logger.LogTrace($"Remote Client ID: {context.ClientId}, Publish topic {context.ApplicationMessage.Topic} to remote broker: {client.Options.ClientId}");
+                                _logger.LogDebug($"Source Client ID: {context.ClientId}, Publish topic {context.ApplicationMessage.Topic} to remote broker: {broker.Options.ClientId}");
 
                                 // Include forwarding signature to flag message as forwarded
                                 context.ApplicationMessage.CorrelationData = ForwardedSignature;
-                                client.PublishAsync(context.ApplicationMessage);
+                                broker.PublishAsync(context.ApplicationMessage);
 
                                 // Should only send once even if topic matches multiple topic filters
                                 break;
