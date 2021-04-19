@@ -355,4 +355,8 @@ MigrationBackup/
 # inno setup output
 [Oo]utput/
 
-
+# custom configuration files
+appSettings.cms-a.json
+appSettings.cms-b.json
+appSettings.cms-q.json
+appSettings.cms-z.json

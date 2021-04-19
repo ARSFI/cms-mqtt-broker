@@ -1,20 +1,30 @@
 # Mirroring MQTT Broker
 
-A multi-server cluster of MQTT brokers to enable sharing information between broker instances.  
+Mirroring MQTT Brokeer provides the ability to create a multi-server cluster of MQTT brokers to enable sharing information between broker instances.  
 
-# Requirements
+# Features
 * MQTT broker /w support for simultaneous and multiple TCP and WebSocket connections
 * Runs as windows service
-* Relay messages received to the other broker(s)
-* Configurable forwarding destination(s)
+* Relays messages received to the other brokers (standard or mirroring)
+* Protects against message loops
+* Configurable forwarding destinations
+* Support for client authentication
 * Capable of filtering messages forwarded to other MQTT brokers
-  * Use subscribe format as part remote broker configuration (multiples)
-  
-# Notes
-* Uses MQTTNet library
+  * Uses standard MQTT topic filter format
 
-# Desired features
+# Desired features (not implemented yet)
 * Suport SSL/TLS connections 
+  
+# Configuration
+* All configuration is made in the appSettings.json file
+
+The 'Kestrel' section of the appSettigns.json file is used to define the ports and protocols used for websocket conections
+
+The 'MQTT' section contains the bulk of other needed settings.
+
+
+
+
 
 
 

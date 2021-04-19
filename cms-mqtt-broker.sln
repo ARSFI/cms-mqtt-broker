@@ -15,7 +15,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{B65F5DF7-4413-475A-8C07-793AA8CCE422}"
 	ProjectSection(SolutionItems) = preProject
 		SolutionItems\MirroringMqttBrokerSetup.iss = SolutionItems\MirroringMqttBrokerSetup.iss
-		SolutionItems\README.md = SolutionItems\README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D390388D-C95B-49C7-BB85-B2EF8C2DD2F3}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
 	EndProjectSection
 EndProject
 Global
