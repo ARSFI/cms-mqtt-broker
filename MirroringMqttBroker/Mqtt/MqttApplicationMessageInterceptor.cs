@@ -44,6 +44,7 @@ namespace MirroringMqttBroker.Mqtt
             
                 foreach (var broker in _service.RemoteBrokers)
                 {
+                    var brokerName = "";
                     if (broker.IsConnected)
                     {
                         // Find topic filters for this connection. Default to match all topics
@@ -53,6 +54,7 @@ namespace MirroringMqttBroker.Mqtt
                             if (remoteBroker.ClientId == broker.Options.ClientId)
                             {
                                 topicFilters = remoteBroker.TopicFilters;
+                                brokerName = remoteBroker.Name;
                             }
                         }
 
@@ -61,7 +63,7 @@ namespace MirroringMqttBroker.Mqtt
                         {
                             if (MqttTopicFilterComparer.IsMatch(context.ApplicationMessage.Topic, filter))
                             {
-                                _logger.LogDebug($"Source Client ID: {context.ClientId}, Publish topic {context.ApplicationMessage.Topic} to remote broker: {broker.Options.ClientId}");
+                                _logger.LogDebug($"Forwarded message with topic: '{context.ApplicationMessage.Topic}' to remote broker: {brokerName}");
 
                                 // Include forwarding signature to flag message as forwarded
                                 context.ApplicationMessage.CorrelationData = ForwardedSignature;

@@ -117,7 +117,7 @@ namespace MirroringMqttBroker.Mqtt
 
                     mqttRemoteBroker.UseConnectedHandler((eventArgs) =>
                     {
-                        _logger.LogInformation($"Connected to {remoteBrokerConfig.Host} port {remoteBrokerConfig.Port}");
+                        _logger.LogInformation($"Connected to {remoteBrokerConfig.Name} MQTT broker at {remoteBrokerConfig.Host}:{remoteBrokerConfig.Port}");
                     });
 
                     // Sustain a disconnect and reconnect
@@ -160,6 +160,9 @@ namespace MirroringMqttBroker.Mqtt
 
         IMqttServerOptions CreateMqttServerOptions()
         {
+            // Create client id if none provided
+            var cid = string.IsNullOrWhiteSpace(_settings.BrokerClientId) ? Guid.NewGuid().ToString("N").ToUpper() : _settings.BrokerClientId;
+
             var options = new MqttServerOptionsBuilder()
                 .WithMaxPendingMessagesPerClient(_settings.MaxPendingMessagesPerClient)
                 .WithDefaultCommunicationTimeout(TimeSpan.FromSeconds(_settings.CommunicationTimeout))
@@ -167,7 +170,7 @@ namespace MirroringMqttBroker.Mqtt
                 .WithApplicationMessageInterceptor(_mqttApplicationMessageInterceptor)
                 .WithSubscriptionInterceptor(_mqttSubscriptionInterceptor)
                 .WithUnsubscriptionInterceptor(_mqttUnsubscriptionInterceptor)
-                .WithClientId(_settings.BrokerClientId);
+                .WithClientId(cid);
 
             // Configure unencrypted connections
             if (_settings.TcpEndPoint.Enabled)
@@ -187,7 +190,7 @@ namespace MirroringMqttBroker.Mqtt
                 if (_settings.TcpEndPoint.Port > 0)
                 {
                     options.WithDefaultEndpointPort(_settings.TcpEndPoint.Port);
-                    _logger.LogInformation($"MQTT Broker listening on TCP port {_settings.TcpEndPoint.Port}");
+                    _logger.LogInformation($"MQTT Broker '{_settings.BrokerName}' listening on TCP port {_settings.TcpEndPoint.Port}, ClientID: {cid}");
                 }
             }
             else
@@ -230,7 +233,7 @@ namespace MirroringMqttBroker.Mqtt
                 if (_settings.EncryptedTcpEndPoint.Port > 0)
                 {
                     options.WithEncryptedEndpointPort(_settings.EncryptedTcpEndPoint.Port);
-                    _logger.LogInformation($"MQTT Broker listening on SSL port {_settings.TcpEndPoint.Port}");
+                    _logger.LogInformation($"MQTT Broker {_settings.BrokerName} listening on SSL port {_settings.TcpEndPoint.Port}");
                 }
             }
             else

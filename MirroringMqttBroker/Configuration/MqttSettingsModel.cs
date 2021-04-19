@@ -51,6 +51,11 @@ namespace MirroringMqttBroker.Configuration
         public int MaxPendingMessagesPerClient { get; set; } = 250;
 
         /// <summary>
+        /// Display name for the broker instance
+        /// </summary>
+        public string BrokerName { get; set; }
+
+        /// <summary>
         /// Unique ID for this MQTT Broker instance
         /// </summary>
         public string BrokerClientId { get; set; }
