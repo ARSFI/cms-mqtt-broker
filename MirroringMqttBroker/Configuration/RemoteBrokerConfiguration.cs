@@ -9,12 +9,23 @@ namespace MirroringMqttBroker.Configuration
             TopicFilters = new List<string>();
         }
 
+        /// <summary>
+        /// Display name
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Host fo IP Address
+        /// </summary>
         public string Host { get; set; }
+
+        /// <summary>
+        /// TCP Port number
+        /// </summary>
         public int Port { get; set; }
 
         /// <summary>
-        /// Unique ID for this remote broker client
+        /// Unique ID for this connection 
         /// </summary>
         public string ClientId { get; set; }
 

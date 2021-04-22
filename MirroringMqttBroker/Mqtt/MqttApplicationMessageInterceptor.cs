@@ -16,8 +16,8 @@ namespace MirroringMqttBroker.Mqtt
         /// <summary>
         /// Used as CorrelationData when forwarding a message to other brokers to prevent message forwarding loops
         /// </summary>
-        private static readonly byte[] ForwardedSignature = {13, 7, 13, 7, 13};
-        
+        private static readonly byte[] ForwardedSignature = { 13, 7, 13, 7, 13 };
+
 
         public MqttApplicationMessageInterceptor(ILogger<MqttApplicationMessageInterceptor> logger)
         {
@@ -41,7 +41,7 @@ namespace MirroringMqttBroker.Mqtt
                     _logger.LogDebug($"Detected already forwarded message. Remote Client ID: {context.ClientId}, Topic {context.ApplicationMessage.Topic}");
                     return Task.CompletedTask;
                 }
-            
+
                 foreach (var broker in _service.RemoteBrokers)
                 {
                     var brokerName = "";
@@ -51,7 +51,8 @@ namespace MirroringMqttBroker.Mqtt
                         var topicFilters = new List<string> { "#" };
                         foreach (var remoteBroker in _service.Settings.RemoteBrokers)
                         {
-                            if (remoteBroker.ClientId == broker.Options.ClientId)
+                            // Remote brokers prefix their client id with [broker_name]
+                            if (broker.Options.ClientId.EndsWith(remoteBroker.ClientId))
                             {
                                 topicFilters = remoteBroker.TopicFilters;
                                 brokerName = remoteBroker.Name;

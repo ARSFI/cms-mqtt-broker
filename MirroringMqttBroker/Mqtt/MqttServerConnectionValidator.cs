@@ -25,7 +25,7 @@ namespace MirroringMqttBroker.Mqtt
                 if (!_mqttSettingsModel.RequireClientAuthentication)
                 {
                     context.ReasonCode = MqttConnectReasonCode.Success;
-                    _logger.LogInformation($"New connection - ClientId: {context.ClientId}");
+                    _logger.LogInformation($"New connection from Endpoint: {context.Endpoint}, ClientId: {context.ClientId}");
                     return Task.CompletedTask;
                 }
 
@@ -36,14 +36,14 @@ namespace MirroringMqttBroker.Mqtt
                         StringComparison.OrdinalIgnoreCase) && context.Password == clientCredential.Password)
                     {
                         context.ReasonCode = MqttConnectReasonCode.Success;
-                        _logger.LogInformation($"New validated connection - ClientId: {context.ClientId}");
+                        _logger.LogInformation($"New validated connection from Endpoint: {context.Endpoint}, ClientId: {context.ClientId}");
                         return Task.CompletedTask;
                     }
                 }
 
                 // Otherwise, reject connection
                 context.ReasonCode = MqttConnectReasonCode.BadUserNameOrPassword;
-                _logger.LogWarning($"Invalid connection attempt - ClientId: {context.ClientId}, Username: {context.Username}");
+                _logger.LogWarning($"Invalid connection attempt from Endpoint: {context.Endpoint}, ClientId: {context.ClientId}, Username: {context.Username}");
             }
             catch (Exception ex)
             {

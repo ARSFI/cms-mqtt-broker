@@ -18,7 +18,7 @@ namespace MirroringMqttBroker.Mqtt
         {
             try
             {
-                _logger.LogInformation($"Client connected: {context.ClientId}");
+                //_logger.LogInformation($"Client connected: {context.ClientId}");
             }
             catch (Exception exception)
             {

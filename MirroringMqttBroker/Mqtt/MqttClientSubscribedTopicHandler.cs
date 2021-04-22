@@ -18,7 +18,7 @@ namespace MirroringMqttBroker.Mqtt
         {
             try
             {
-                _logger.LogInformation($"Received subscribe request from '{context.ClientId}' for topic '{context.TopicFilter.Topic}");
+                //_logger.LogInformation($"Received subscribe request from '{context.ClientId}' for topic '{context.TopicFilter.Topic}'");
             }
             catch (Exception exception)
             {

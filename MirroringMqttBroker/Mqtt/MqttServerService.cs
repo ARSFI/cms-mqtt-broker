@@ -103,7 +103,8 @@ namespace MirroringMqttBroker.Mqtt
                 {
                     var mqttRemoteBroker = mqttFactory.CreateMqttClient();
                     var mqttClientOptionsBuilder = new MqttClientOptionsBuilder()
-                        .WithClientId(remoteBrokerConfig.ClientId)
+                        //prepend this broker's name to help identify the connection in logs
+                        .WithClientId($"[From: {_settings.BrokerName}]{remoteBrokerConfig.ClientId}")
                         .WithCleanSession()
                         .WithCredentials(
                             remoteBrokerConfig.UserName,
@@ -117,7 +118,7 @@ namespace MirroringMqttBroker.Mqtt
 
                     mqttRemoteBroker.UseConnectedHandler((eventArgs) =>
                     {
-                        _logger.LogInformation($"Connected to {remoteBrokerConfig.Name} MQTT broker at {remoteBrokerConfig.Host}:{remoteBrokerConfig.Port}");
+                        _logger.LogInformation($"Connected to Remote broker '{remoteBrokerConfig.Name}' at: {remoteBrokerConfig.Host}:{remoteBrokerConfig.Port}");
                     });
 
                     // Sustain a disconnect and reconnect
@@ -125,13 +126,11 @@ namespace MirroringMqttBroker.Mqtt
                     {
                         await Task.Delay(MqttSettingsModel.ConnectionDelayInMilliseconds).ContinueWith(async (arg) =>
                         {
-                            _logger.LogInformation($"Reconnecting to {remoteBrokerConfig.Host} port {remoteBrokerConfig.Port}");
+                            _logger.LogInformation($"Reconnecting to Remote broker '{remoteBrokerConfig.Name}' at: {remoteBrokerConfig.Host}:{remoteBrokerConfig.Port}");
                             await mqttRemoteBroker.ConnectAsync(mqttClientOptionsBuilder.Build());
                         });
                     });
                 }
-
-                _logger.LogDebug($"Waiting {MqttSettingsModel.ConnectionDelayInMilliseconds} milliseconds before connecting to remote brokers");
                 Task.Delay(MqttSettingsModel.ConnectionDelayInMilliseconds).Wait();
 
                 try
@@ -142,7 +141,7 @@ namespace MirroringMqttBroker.Mqtt
                 catch (AggregateException ae)
                 {
                     // Ignore initial errors
-                    // Disconnect logic (above) will handle retries
+                    // Disconnect handler (above) will handle retries
                     ae.Handle(inner =>
                     {
                         _logger.LogTrace(ae.Message);

@@ -18,7 +18,7 @@ namespace MirroringMqttBroker.Mqtt
         {
             try
             {
-                _logger.LogInformation($"Received unsubscribe request from '{context.ClientId}' for topic '{context.TopicFilter}");
+                //_logger.LogInformation($"Received unsubscribe request from '{context.ClientId}' for topic '{context.TopicFilter}'");
             }
             catch (Exception exception)
             {
