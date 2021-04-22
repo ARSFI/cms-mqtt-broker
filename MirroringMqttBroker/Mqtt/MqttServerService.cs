@@ -29,13 +29,17 @@ namespace MirroringMqttBroker.Mqtt
         private readonly MqttClientSubscribedTopicHandler _mqttClientSubscribedTopicHandler;
         private readonly MqttClientUnsubscribedTopicHandler _mqttClientUnsubscribedTopicHandler;
         private readonly MqttServerConnectionValidator _mqttConnectionValidator;
-        private readonly IMqttServer _mqttServer;
         private readonly MqttSubscriptionInterceptor _mqttSubscriptionInterceptor;
         private readonly MqttUnsubscriptionInterceptor _mqttUnsubscriptionInterceptor;
         private readonly MqttWebSocketServerAdapter _webSocketServerAdapter;
 
+        private readonly IMqttServer _mqttServer;
         private List<IMqttClient> _mqttRemoteBrokers;
         private List<IMqttClientOptions> _mqttRemoteBrokerOptions;
+
+        public IEnumerable<IMqttClient> RemoteBrokers => _mqttRemoteBrokers;
+
+        public MqttSettingsModel Settings => _settings;
 
         public MqttServerService(
             MqttSettingsModel mqttSettings,
@@ -73,13 +77,10 @@ namespace MirroringMqttBroker.Mqtt
 
             _mqttServer = mqttFactory.CreateMqttServer(adapters);
 
+            // Make this object available to message interceptor class avoiding
+            // circular references created when using dependency injection.
             _mqttApplicationMessageInterceptor.SetServerService(this);
         }
-
-        // We return IEnumerable here so callers don't inadvertently modify the collection.
-        public IEnumerable<IMqttClient> RemoteBrokers => _mqttRemoteBrokers;
-
-        public MqttSettingsModel Settings => _settings;
 
         public void Configure()
         {
