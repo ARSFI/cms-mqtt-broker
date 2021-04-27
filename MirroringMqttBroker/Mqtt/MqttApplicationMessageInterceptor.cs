@@ -38,7 +38,7 @@ namespace MirroringMqttBroker.Mqtt
                 // Avoid loops by not mirroring messages that have been forwarded by other brokers.
                 if (context.ApplicationMessage.CorrelationData != null && context.ApplicationMessage.CorrelationData.SequenceEqual(ForwardedSignature))
                 {
-                    _logger.LogDebug($"Detected already forwarded message. Remote Client ID: {context.ClientId}, Topic {context.ApplicationMessage.Topic}");
+                    _logger.LogTrace($"Detected already forwarded message. Remote Client ID: {context.ClientId}, Topic {context.ApplicationMessage.Topic}");
                     return Task.CompletedTask;
                 }
 
@@ -64,7 +64,7 @@ namespace MirroringMqttBroker.Mqtt
                         {
                             if (MqttTopicFilterComparer.IsMatch(context.ApplicationMessage.Topic, filter))
                             {
-                                _logger.LogDebug($"Forwarded message with topic: '{context.ApplicationMessage.Topic}' to remote broker: {brokerName}");
+                                _logger.LogTrace($"Forwarded message with topic: '{context.ApplicationMessage.Topic}' to remote broker: {brokerName}");
 
                                 // Include forwarding signature to flag message as forwarded
                                 context.ApplicationMessage.CorrelationData = ForwardedSignature;
